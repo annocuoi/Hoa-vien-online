@@ -523,6 +523,7 @@ if not st.session_state.da_dang_nhap:
                     st.session_state.da_dang_nhap = True
 
                     st.session_state.quyen = TAI_KHOAN[ten_dang_nhap]["quyen"]
+                    st.session_state.ten_tai_khoan = ten_dang_nhap
 
                     st.rerun()
 
@@ -537,6 +538,22 @@ with col_logout:
     if st.button("🚪 Đăng xuất", type="secondary", use_container_width=True):
         st.session_state.da_dang_nhap = False
         st.rerun()
+# ==================================
+# CHỌN DỮ LIỆU THEO TÀI KHOẢN
+# ==================================
+
+if st.session_state.quyen == "admin":
+
+    du_lieu_hoi_dang_dung = st.session_state.du_lieu_thanh_vien
+
+else:
+
+    ten = st.session_state.ten_tai_khoan
+
+    if ten not in st.session_state.du_lieu_thanh_vien:
+        st.session_state.du_lieu_thanh_vien[ten] = {}
+
+    du_lieu_hoi_dang_dung = st.session_state.du_lieu_thanh_vien[ten]        
 
 # ----------------------------------------------------
 # 📂 HÀM ĐỌC DỮ LIỆU TỪ GITHUB
@@ -654,11 +671,11 @@ unsafe_allow_html=True
 
 tong_hoa_hoi_vien = sum(
     len(hoa)
-    for hoa in st.session_state.du_lieu_thanh_vien.values()
+    for hoa in du_lieu_hoi_dang_dung.values()
 )
 
 tong_hoi_vien = len(
-    st.session_state.du_lieu_thanh_vien
+    du_lieu_hoi_dang_dung
 )
 
 
@@ -693,7 +710,7 @@ height=75
 )
 
 st.write("---")
-danh_sach_tv = list(st.session_state.du_lieu_thanh_vien.keys())
+danh_sach_tv = list(du_lieu_hoi_dang_dung.keys())
 
 if st.session_state.quyen == "admin":
 
@@ -1068,7 +1085,7 @@ if st.session_state.quyen == "admin":
                         ten_tv_clean = ten_tv_moi.strip()
 
                         if ten_tv_clean:
-                            st.session_state.du_lieu_thanh_vien[ten_tv_clean] = []
+                            du_lieu_hoi_dang_dung[ten_tv_clean] = []
 
                             if luu_du_lieu_len_github():
                                 st.session_state.key_them_tv += 1
@@ -1076,7 +1093,7 @@ if st.session_state.quyen == "admin":
 
                 tv_xoa = st.selectbox(
                     "🗑 Xóa hội viên",
-                    ["-- Chọn --"] + list(st.session_state.du_lieu_thanh_vien.keys()),
+                    ["-- Chọn --"] + list(du_lieu_hoi_dang_dung.keys())
                     key="xoa_tv"
                 )
 
@@ -1085,7 +1102,7 @@ if st.session_state.quyen == "admin":
                     use_container_width=True
                 ):
                     if tv_xoa != "-- Chọn --":
-                        del st.session_state.du_lieu_thanh_vien[tv_xoa]
+                        del du_lieu_hoi_dang_dung[tv_xoa]
 
                         if luu_du_lieu_len_github():
                             st.rerun()
@@ -1099,7 +1116,7 @@ if st.session_state.quyen == "admin":
             st.markdown("## 🪷 Thêm Hoa Cho Hội Viên")
 
             danh_sach_tv = list(
-                st.session_state.du_lieu_thanh_vien.keys()
+                du_lieu_hoi_dang_dung.keys()
             )
 
             tv_chon = st.selectbox(
@@ -1109,7 +1126,7 @@ if st.session_state.quyen == "admin":
             )
 
             # lấy hoa hội viên đang có
-            hoa_da_co = st.session_state.du_lieu_thanh_vien.get(
+            hoa_da_co = du_lieu_hoi_dang_dung.get(
                 tv_chon,
                 []
             )
@@ -1135,7 +1152,7 @@ if st.session_state.quyen == "admin":
                     use_container_width=True
                 ):
 
-                    st.session_state.du_lieu_thanh_vien[tv_chon].append(
+                    du_lieu_hoi_dang_dung[tv_chon].append(
                         hoa_chon
                     )
 
@@ -1159,7 +1176,7 @@ with tab_xep_hang:
 
     bang_xep_hang = []
 
-    for ten_tv, ds_hoa in st.session_state.du_lieu_thanh_vien.items():
+    for ten_tv, ds_hoa in du_lieu_hoi_dang_dung.items():
 
         dem = {
             "Đỏ":0,
@@ -1299,10 +1316,10 @@ with tab_suu_tap:
         )
     
     
-        if tv_xem != "-- Chọn --" and tv_xem in st.session_state.du_lieu_thanh_vien:
+        if tv_xem != "-- Chọn --" and tv_xem in du_lieu_hoi_dang_dung:
     
     
-            kho_hoa_tv = st.session_state.du_lieu_thanh_vien[tv_xem]
+            kho_hoa_tv = du_lieu_hoi_dang_dung[tv_xem]
     
     
             if not kho_hoa_tv:
@@ -1449,7 +1466,7 @@ with tab_suu_tap:
                         if hoa_thu_hoi != "-- Chọn hoa --":
         
         
-                            st.session_state.du_lieu_thanh_vien[tv_xem].remove(
+                            du_lieu_hoi_dang_dung[tv_xem].remove(
                                 hoa_thu_hoi
                             )
         
@@ -1478,7 +1495,7 @@ with tab_suu_tap:
             owners = [
                 tv
                 for tv, hoa_list
-                in st.session_state.du_lieu_thanh_vien.items()
+                in du_lieu_hoi_dang_dung.items()
                 if ten_hoa in hoa_list
             ]
 
@@ -1546,7 +1563,7 @@ with tab_suu_tap:
                 owners = [
                     tv
                     for tv, hoa_list
-                    in st.session_state.du_lieu_thanh_vien.items()
+                    in du_lieu_hoi_dang_dung.items()
                     if ten_hoa in hoa_list
                 ]
 
@@ -1626,7 +1643,7 @@ with tab_suu_tap:
 
                 ds_co = []
 
-                for tv, hoa_list in st.session_state.du_lieu_thanh_vien.items():
+                for tv, hoa_list in du_lieu_hoi_dang_dung.items():
 
                     if hoa_chon in hoa_list:
                         ds_co.append(tv)
