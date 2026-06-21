@@ -1699,39 +1699,39 @@ with tab_thong_tin:
 # ==================================================
 # 👥 QUẢN LÝ TÀI KHOẢN KHÁCH
 # ==================================================
+if st.session_state.quyen == "admin":
+    with tab_khach:
 
-with tab_khach:
+        st.markdown("### 👥 Quản lý tài khoản khách")
 
-    st.markdown("### 👥 Quản lý tài khoản khách")
+        ten_moi = st.text_input(
+            "Tên tài khoản khách",
+            key="tao_user"
+        )
 
-    ten_moi = st.text_input(
-        "Tên tài khoản khách",
-        key="tao_user"
-    )
+        mat_khau_moi = st.text_input(
+            "Mật khẩu",
+            key="tao_pass"
+        )
 
-    mat_khau_moi = st.text_input(
-        "Mật khẩu",
-        key="tao_pass"
-    )
+        if st.button("➕ Tạo tài khoản khách"):
 
-    if st.button("➕ Tạo tài khoản khách"):
+            if ten_moi.strip() == "" or mat_khau_moi.strip() == "":
+                st.warning("Nhập đủ tài khoản và mật khẩu")
 
-        if ten_moi.strip() == "" or mat_khau_moi.strip() == "":
-            st.warning("Nhập đủ tài khoản và mật khẩu")
+            elif ten_moi in st.session_state.tai_khoan:
+                st.error("Tài khoản đã tồn tại")
 
-        elif ten_moi in st.session_state.tai_khoan:
-            st.error("Tài khoản đã tồn tại")
+            else:
+                st.session_state.tai_khoan[ten_moi] = {
+                    "pass": mat_khau_moi,
+                    "quyen": "user"
+                }
 
-        else:
-            st.session_state.tai_khoan[ten_moi] = {
-                "pass": mat_khau_moi,
-                "quyen": "user"
-            }
+                if ten_moi not in st.session_state.du_lieu_thanh_vien:
+                    st.session_state.du_lieu_thanh_vien[ten_moi] = {}
 
-            if ten_moi not in st.session_state.du_lieu_thanh_vien:
-                st.session_state.du_lieu_thanh_vien[ten_moi] = {}
+                luu_du_lieu_len_github()
 
-            luu_du_lieu_len_github()
-
-            st.success("Đã tạo tài khoản khách")
-            st.rerun()
+                st.success("Đã tạo tài khoản khách")
+                st.rerun()
