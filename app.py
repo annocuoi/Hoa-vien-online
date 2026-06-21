@@ -1093,7 +1093,7 @@ if st.session_state.quyen == "admin":
 
                 tv_xoa = st.selectbox(
                     "🗑 Xóa hội viên",
-                    ["-- Chọn --"] + list(du_lieu_hoi_dang_dung.keys())
+                    ["-- Chọn --"] + list(du_lieu_hoi_dang_dung.keys()),
                     key="xoa_tv"
                 )
 
