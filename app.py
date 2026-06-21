@@ -496,7 +496,10 @@ if "tai_khoan" not in st.session_state:
             "quyen": "admin"
         }
     }
-TAI_KHOAN = TAI_KHOAN_MAC_DINH
+if "tai_khoan" not in st.session_state:
+    st.session_state.tai_khoan = TAI_KHOAN_MAC_DINH
+
+TAI_KHOAN = st.session_state.tai_khoan
     
 
 TAI_KHOAN = st.session_state.tai_khoan    
