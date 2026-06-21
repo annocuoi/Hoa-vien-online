@@ -484,42 +484,6 @@ HEADERS = {
 API_URL = f"https://api.github.com/repos/{REPO_NAME}/contents/{FILE_PATH}"
 
 # ====================================================
-# 🔒 KHU VỰC ĐĂNG NHẬP BẢO MẬT
-# ====================================================
-if "da_dang_nhap" not in st.session_state:
-    st.session_state.da_dang_nhap = False
-
-if not st.session_state.da_dang_nhap:
-
-    st.markdown("<h2 style='text-align:center'>🔐 HỆ THỐNG BẢO MẬT</h2>", unsafe_allow_html=True)
-
-    ten_dang_nhap = st.text_input(
-        "Tài khoản",
-        placeholder="Nhập tài khoản..."
-    )
-
-    mat_khau_nhap = st.text_input(
-        "Mật khẩu",
-        type="password",
-        placeholder="Nhập mật khẩu..."
-    )
-
-    if st.button("🔐 Đăng Nhập", use_container_width=True):
-
-        if ten_dang_nhap in TAI_KHOAN and mat_khau_nhap == TAI_KHOAN[ten_dang_nhap]["pass"]:
-
-            st.session_state.da_dang_nhap = True
-            st.session_state.ten_tai_khoan = ten_dang_nhap
-            st.session_state.quyen = TAI_KHOAN[ten_dang_nhap]["quyen"]
-
-            st.rerun()
-
-        else:
-            st.error("Sai tài khoản hoặc mật khẩu")
-
-    st.stop()
-
-    st.stop()
 
 col_title, col_logout = st.columns([8, 2])
 with col_logout:
