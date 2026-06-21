@@ -5,6 +5,7 @@ import streamlit as st # type: ignore
 import streamlit.components.v1 as components
 import time
 from PIL import Image
+from datetime import datetime
 import io
 
 # Cấu hình giao diện ứng dụng (phải nằm trước mọi lệnh st.)
@@ -714,13 +715,13 @@ danh_sach_tv = list(du_lieu_hoi_dang_dung.keys())
 
 if st.session_state.quyen == "admin":
 
-    tab_kho, tab_khach = st.tabs(
+    tab_kho, tab_khach, tab_kiem_soat = st.tabs(
         [
             "📦 Kho",
-            "👥 Khách hàng"
+            "👥 Khách hàng",
+            "📊 Kiểm soát"
         ]
     )
-
 else:
 
     tab_suu_tap, tab_hoi_vien, tab_xep_hang, tab_thong_tin = st.tabs(
@@ -1731,7 +1732,8 @@ if st.session_state.quyen == "admin":
             else:
                 st.session_state.tai_khoan[ten_moi] = {
                     "pass": mat_khau_moi,
-                    "quyen": "user"
+                    "quyen": "user",
+                    "ngay_tao": datetime.now().strftime("%d/%m/%Y")
                 }
 
                 if ten_moi not in st.session_state.du_lieu_thanh_vien:
@@ -1741,3 +1743,93 @@ if st.session_state.quyen == "admin":
 
                 st.success("Đã tạo tài khoản khách")
                 st.rerun()
+        # =========================
+        # 🗑️ XÓA TÀI KHOẢN KHÁCH
+        # =========================
+
+        st.markdown("### 🗑️ Xóa tài khoản khách")
+
+        ds_khach = [
+            ten
+            for ten, info in st.session_state.tai_khoan.items()
+            if info.get("quyen") == "user"
+        ]
+
+        khach_xoa = st.selectbox(
+            "Chọn khách cần xóa",
+            ["-- Chọn --"] + ds_khach,
+            key="xoa_khach"
+        )
+
+
+        if st.button(
+            "❌ Xóa khách hàng",
+            use_container_width=True
+        ):
+
+            if khach_xoa == "-- Chọn --":
+
+                st.warning("⚠️ Chọn khách cần xóa")
+
+            else:
+
+                # xóa tài khoản
+                del st.session_state.tai_khoan[khach_xoa]
+
+
+                # xóa dữ liệu của khách
+                if khach_xoa in st.session_state.du_lieu_thanh_vien:
+
+                    del st.session_state.du_lieu_thanh_vien[khach_xoa]
+
+
+                if luu_du_lieu_len_github():
+
+                    st.success(
+                        f"Đã xóa khách {khach_xoa}"
+                    )
+
+                    st.rerun()
+
+if st.session_state.quyen == "admin":
+
+    with tab_kiem_soat:
+
+        st.subheader("📊 Kiểm soát khách hàng")
+
+        tong_khach = 0
+
+        for ten, info in st.session_state.tai_khoan.items():
+
+            if info.get("quyen") == "user":
+                tong_khach += 1
+
+
+        st.metric(
+            "👥 Tổng khách hàng",
+            tong_khach
+        )
+
+
+        for ten, info in st.session_state.tai_khoan.items():
+
+            if info.get("quyen") == "user":
+
+                so_tv = len(
+                    st.session_state.du_lieu_thanh_vien.get(
+                        ten,
+                        {}
+                    )
+                )
+
+                st.markdown(
+                    f"""
+                    ### 👤 {ten}
+
+                    📅 Ngày tạo: {info.get("ngay_tao","Không rõ")}
+
+                    👥 Hội viên: {so_tv}
+
+                    ---
+                    """
+                )
