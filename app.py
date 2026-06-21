@@ -459,7 +459,7 @@ def sap_xep_hoa(ds_hoa):
 MAT_KHAU_HE_THONG = "111111"
 TAI_KHOAN_MAC_DINH = {
     "admin": {
-        "pass": "13051998",
+        "pass": "111111",
         "quyen": "admin"
     }
 }
@@ -539,13 +539,17 @@ with col_logout:
     if st.button("🚪 Đăng xuất", type="secondary", use_container_width=True):
         st.session_state.da_dang_nhap = False
         st.rerun()
-# ==================================
+# ======================================
 # CHỌN DỮ LIỆU THEO TÀI KHOẢN
-# ==================================
+# ======================================
+
+if "du_lieu_thanh_vien" not in st.session_state:
+    st.session_state.du_lieu_thanh_vien = {}
 
 if st.session_state.quyen == "admin":
 
-    du_lieu_hoi_dang_dung = st.session_state.du_lieu_thanh_vien
+    # admin không dùng hội viên
+    du_lieu_hoi_dang_dung = {}
 
 else:
 
@@ -554,7 +558,7 @@ else:
     if ten not in st.session_state.du_lieu_thanh_vien:
         st.session_state.du_lieu_thanh_vien[ten] = {}
 
-    du_lieu_hoi_dang_dung = st.session_state.du_lieu_thanh_vien[ten]        
+    du_lieu_hoi_dang_dung = st.session_state.du_lieu_thanh_vien[ten]
 
 # ----------------------------------------------------
 # 📂 HÀM ĐỌC DỮ LIỆU TỪ GITHUB
@@ -1743,6 +1747,33 @@ if st.session_state.quyen == "admin":
 
                 st.success("Đã tạo tài khoản khách")
                 st.rerun()
+        # =============================
+        # 🔑 ĐỔI MẬT KHẨU ADMIN
+        # =============================
+
+        st.write("---")
+        st.markdown("### 🔑 Đổi mật khẩu Admin")
+
+        mk_admin_moi = st.text_input(
+            "Mật khẩu admin mới",
+            type="password",
+            key="doi_pass_admin"
+        )
+
+        if st.button(
+            "💾 Lưu mật khẩu admin",
+            use_container_width=True
+        ):
+
+            if mk_admin_moi.strip() == "":
+                st.warning("Nhập mật khẩu mới")
+
+            else:
+                st.session_state.tai_khoan["admin"]["pass"] = mk_admin_moi
+
+                if luu_du_lieu_len_github():
+                    st.success("✅ Đã đổi mật khẩu admin")
+                    st.rerun()
         # =========================
         # 🗑️ XÓA TÀI KHOẢN KHÁCH
         # =========================
