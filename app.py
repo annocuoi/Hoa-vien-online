@@ -659,7 +659,7 @@ if "kho_hoa_tong" not in st.session_state or "du_lieu_thanh_vien" not in st.sess
 
     st.session_state.tai_khoan = du_lieu_goc.get(
         "tai_khoan",
-        TAI_KHOAN_MAC_DINH
+        TAI_KHOAN_MAC_DINH.copy()
     )
 
 st.markdown(
