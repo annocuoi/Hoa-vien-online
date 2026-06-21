@@ -1145,17 +1145,23 @@ if st.session_state.quyen != "admin":
                 )
 
                 if st.button(
-                    "🪷 Thêm Hoa",
+                    "🌸 Thêm Hoa",
                     use_container_width=True
                 ):
 
-                    du_lieu_hoi_dang_dung[tv_chon].append(
-                        hoa_chon
-                    )
+                    if tv_chon == "-- Chọn --":
+                        st.warning("⚠️ Vui lòng chọn hội viên trước")
 
-                    if luu_du_lieu_len_github():
-                        st.rerun()
+                    elif hoa_chon == "-- Chọn hoa --":
+                        st.warning("⚠️ Vui lòng chọn hoa")
 
+                    else:
+                        du_lieu_hoi_dang_dung[tv_chon].append(
+                            hoa_chon
+                        )
+
+                        if luu_du_lieu_len_github():
+                            st.rerun()
             else:
 
                 st.info("✅ Hội viên đã có tất cả hoa")
