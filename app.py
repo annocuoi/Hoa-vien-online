@@ -1301,268 +1301,201 @@ if st.session_state.quyen != "admin":
 # ====================================================
 # KHU VỰC 3: BỘ SƯU TẬP
 # ====================================================
-with tab_suu_tap:
-    st.markdown("<h3 style='font-size: 18px;'>🔍 3. Bộ Sưu Tập</h3>", unsafe_allow_html=True)
-    tab1, tab2, tab3 = st.tabs(
-        [
-            "👤 Cá Nhân",
-            "👥 Toàn Hội",
-            "🔎 Tra cứu"
-        ]
-    )
-    
-    with tab1:
-    
-        tv_xem = st.selectbox(
-            "Xem kho của:",
-            options=["-- Chọn --"] + danh_sach_tv,
-            key="selectTV"
-        )
-    
-    
-        if tv_xem != "-- Chọn --" and tv_xem in du_lieu_hoi_dang_dung:
-    
-    
-            kho_hoa_tv = du_lieu_hoi_dang_dung[tv_xem]
-    
-    
-            if not kho_hoa_tv:
-    
-                st.markdown(
-                    "<p style='font-size:13px;'>Trống.</p>",
-                    unsafe_allow_html=True
-                )
-    
-    
-            else:
-                dem_cap = {
-                    "Đỏ": 0,
-                    "Cam": 0,
-                    "Tím": 0,
-                    "Xanh dương": 0,
-                    "Xanh lá": 0
-                }
-
-                for ten in kho_hoa_tv:
-                    info = st.session_state.kho_hoa_tong.get(ten, {})
-                    cap = info.get("cap", "")
-
-                    if cap in dem_cap:
-                        dem_cap[cap] += 1
-
-                tong_hoa = sum(dem_cap.values())
-                chon_cap = st.radio(
-                    "Lọc cấp:",
-                    [
-                        f"🌈 Tất cả: {tong_hoa}",
-                        f"🔴 Đỏ: {dem_cap['Đỏ']}",
-                        f"🟠 Cam: {dem_cap['Cam']}",
-                        f"🟣 Tím: {dem_cap['Tím']}",
-                        f"🔵 Xanh dương: {dem_cap['Xanh dương']}",
-                        f"🟢 Xanh lá: {dem_cap['Xanh lá']}"
-                    ],
-                    horizontal=True
-                )
-
-                if "Đỏ" in chon_cap:
-                    loc_cap = "Đỏ"
-                elif "Cam" in chon_cap:
-                    loc_cap = "Cam"
-                elif "Tím" in chon_cap:
-                    loc_cap = "Tím"
-                elif "Xanh dương" in chon_cap:
-                    loc_cap = "Xanh dương"
-                elif "Xanh lá" in chon_cap:
-                    loc_cap = "Xanh lá"
-                else:
-                    loc_cap = "Tất cả"
-    
-    
-                html = '<div class="flower-grid">'
-    
-    
-                for ten_hoa in sap_xep_hoa(kho_hoa_tv):
-                    info = st.session_state.kho_hoa_tong.get(
-                        ten_hoa,
-                        {"anh": None}
-                    )
-
-                    if "Đỏ" in chon_cap and info.get("cap") != "Đỏ":
-                        continue
-
-                    if "Cam" in chon_cap and info.get("cap") != "Cam":
-                        continue
-
-                    if "Tím" in chon_cap and info.get("cap") != "Tím":
-                        continue
-
-                    if "Xanh dương" in chon_cap and info.get("cap") != "Xanh dương":
-                        continue
-
-                    if "Xanh lá" in chon_cap and info.get("cap") != "Xanh lá":
-                        continue
-    
-    
-                    info = st.session_state.kho_hoa_tong.get(
-                        ten_hoa,
-                        {"anh": None}
-                    )
-    
-    
-                    link_anh = anh_html(info["anh"])
-                    cap = info.get("cap", "")
-
-                    if cap == "Đỏ":
-                        mau = "#ef4444"
-
-                    elif cap == "Tím":
-                        mau = "#c084fc"
-
-                    elif cap == "Xanh lá":
-                        mau = "#22c55e"
-
-                    elif cap == "Xanh dương":
-                        mau = "#38bdf8"
-
-                    elif cap == "Cam":
-                        mau = "#f59e0b"
-
-                    else:
-                        mau = "#d6a83d"
-                        
-    
-                    html += f"""
-                    <div class="flower-box">
-                        <img src="{link_anh}" style="border:5px solid {mau};">
-                        <div class="flower-name">
-                            {ten_hoa}
-                        </div>
-                    </div>
-                    """
-    
-    
-                html += "</div>"
-    
-    
-                components.html(
-        GRID_STYLE + html,
-        height=450,
-        scrolling=True
-    )
-    
-    
-                st.write("")
-    
-               
-                hoa_thu_hoi = st.selectbox(
-                    "↩️ Chọn hoa cần thu hồi",
-                    ["-- Chọn hoa --"] + list(kho_hoa_tv),
-                    key="chon_thu_hoi"
-                )
-    
-               
-                if st.button(
-                    "↩️ Thu hồi hoa",
-                    use_container_width=True
-                ):
-    
-    
-                    if hoa_thu_hoi != "-- Chọn hoa --":
-    
-    
-                        du_lieu_hoi_dang_dung[tv_xem].remove(
-                            hoa_thu_hoi
-                        )
-    
-    
-                        if luu_du_lieu_len_github():
-    
-    
-                            st.rerun()
-
-    with tab2:
-
-        # ==============================
-        # ĐẾM CẤP HOA
-        # ==============================
-        dem_cap = {
-            "Đỏ": 0,
-            "Cam": 0,
-            "Tím": 0,
-            "Xanh dương": 0,
-            "Xanh lá": 0
-        }
-
-
-        for ten_hoa, info in st.session_state.kho_hoa_tong.items():
-
-            owners = [
-                tv
-                for tv, hoa_list
-                in du_lieu_hoi_dang_dung.items()
-                if ten_hoa in hoa_list
-            ]
-
-            if owners:
-                cap = info.get("cap", "")
-
-                if cap in dem_cap:
-                    dem_cap[cap] += 1
-
-
-        tong_hoa = sum(dem_cap.values())
-
-
-        chon_cap = st.radio(
-            "Lọc cấp:",
+if st.session_state.quyen != "admin":
+    with tab_suu_tap:
+        st.markdown("<h3 style='font-size: 18px;'>🔍 3. Bộ Sưu Tập</h3>", unsafe_allow_html=True)
+        tab1, tab2, tab3 = st.tabs(
             [
-                f"🌈 Tất cả: {tong_hoa}",
-                f"🔴 Đỏ: {dem_cap['Đỏ']}",
-                f"🟠 Cam: {dem_cap['Cam']}",
-                f"🟣 Tím: {dem_cap['Tím']}",
-                f"🔵 Xanh dương: {dem_cap['Xanh dương']}",
-                f"🟢 Xanh lá: {dem_cap['Xanh lá']}"
-            ],
-            horizontal=True,
-            key="loc_cap_toan_hoi"
+                "👤 Cá Nhân",
+                "👥 Toàn Hội",
+                "🔎 Tra cứu"
+            ]
         )
-
-
-        if not st.session_state.kho_hoa_tong:
-
-            st.markdown(
-                "<p style='font-size:13px;'>Chưa có hoa nào.</p>",
-                unsafe_allow_html=True
+        
+        with tab1:
+        
+            tv_xem = st.selectbox(
+                "Xem kho của:",
+                options=["-- Chọn --"] + danh_sach_tv,
+                key="selectTV"
             )
+        
+        
+            if tv_xem != "-- Chọn --" and tv_xem in du_lieu_hoi_dang_dung:
+        
+        
+                kho_hoa_tv = du_lieu_hoi_dang_dung[tv_xem]
+        
+        
+                if not kho_hoa_tv:
+        
+                    st.markdown(
+                        "<p style='font-size:13px;'>Trống.</p>",
+                        unsafe_allow_html=True
+                    )
+        
+        
+                else:
+                    dem_cap = {
+                        "Đỏ": 0,
+                        "Cam": 0,
+                        "Tím": 0,
+                        "Xanh dương": 0,
+                        "Xanh lá": 0
+                    }
+
+                    for ten in kho_hoa_tv:
+                        info = st.session_state.kho_hoa_tong.get(ten, {})
+                        cap = info.get("cap", "")
+
+                        if cap in dem_cap:
+                            dem_cap[cap] += 1
+
+                    tong_hoa = sum(dem_cap.values())
+                    chon_cap = st.radio(
+                        "Lọc cấp:",
+                        [
+                            f"🌈 Tất cả: {tong_hoa}",
+                            f"🔴 Đỏ: {dem_cap['Đỏ']}",
+                            f"🟠 Cam: {dem_cap['Cam']}",
+                            f"🟣 Tím: {dem_cap['Tím']}",
+                            f"🔵 Xanh dương: {dem_cap['Xanh dương']}",
+                            f"🟢 Xanh lá: {dem_cap['Xanh lá']}"
+                        ],
+                        horizontal=True
+                    )
+
+                    if "Đỏ" in chon_cap:
+                        loc_cap = "Đỏ"
+                    elif "Cam" in chon_cap:
+                        loc_cap = "Cam"
+                    elif "Tím" in chon_cap:
+                        loc_cap = "Tím"
+                    elif "Xanh dương" in chon_cap:
+                        loc_cap = "Xanh dương"
+                    elif "Xanh lá" in chon_cap:
+                        loc_cap = "Xanh lá"
+                    else:
+                        loc_cap = "Tất cả"
+        
+        
+                    html = '<div class="flower-grid">'
+        
+        
+                    for ten_hoa in sap_xep_hoa(kho_hoa_tv):
+                        info = st.session_state.kho_hoa_tong.get(
+                            ten_hoa,
+                            {"anh": None}
+                        )
+
+                        if "Đỏ" in chon_cap and info.get("cap") != "Đỏ":
+                            continue
+
+                        if "Cam" in chon_cap and info.get("cap") != "Cam":
+                            continue
+
+                        if "Tím" in chon_cap and info.get("cap") != "Tím":
+                            continue
+
+                        if "Xanh dương" in chon_cap and info.get("cap") != "Xanh dương":
+                            continue
+
+                        if "Xanh lá" in chon_cap and info.get("cap") != "Xanh lá":
+                            continue
+        
+        
+                        info = st.session_state.kho_hoa_tong.get(
+                            ten_hoa,
+                            {"anh": None}
+                        )
+        
+        
+                        link_anh = anh_html(info["anh"])
+                        cap = info.get("cap", "")
+
+                        if cap == "Đỏ":
+                            mau = "#ef4444"
+
+                        elif cap == "Tím":
+                            mau = "#c084fc"
+
+                        elif cap == "Xanh lá":
+                            mau = "#22c55e"
+
+                        elif cap == "Xanh dương":
+                            mau = "#38bdf8"
+
+                        elif cap == "Cam":
+                            mau = "#f59e0b"
+
+                        else:
+                            mau = "#d6a83d"
+                            
+        
+                        html += f"""
+                        <div class="flower-box">
+                            <img src="{link_anh}" style="border:5px solid {mau};">
+                            <div class="flower-name">
+                                {ten_hoa}
+                            </div>
+                        </div>
+                        """
+        
+        
+                    html += "</div>"
+        
+        
+                    components.html(
+            GRID_STYLE + html,
+            height=450,
+            scrolling=True
+        )
+        
+        
+                    st.write("")
+        
+                
+                    hoa_thu_hoi = st.selectbox(
+                        "↩️ Chọn hoa cần thu hồi",
+                        ["-- Chọn hoa --"] + list(kho_hoa_tv),
+                        key="chon_thu_hoi"
+                    )
+        
+                
+                    if st.button(
+                        "↩️ Thu hồi hoa",
+                        use_container_width=True
+                    ):
+        
+        
+                        if hoa_thu_hoi != "-- Chọn hoa --":
+        
+        
+                            du_lieu_hoi_dang_dung[tv_xem].remove(
+                                hoa_thu_hoi
+                            )
+        
+        
+                            if luu_du_lieu_len_github():
+        
+        
+                                st.rerun()
+
+        with tab2:
+
+            # ==============================
+            # ĐẾM CẤP HOA
+            # ==============================
+            dem_cap = {
+                "Đỏ": 0,
+                "Cam": 0,
+                "Tím": 0,
+                "Xanh dương": 0,
+                "Xanh lá": 0
+            }
 
 
-        else:
-
-            html = '<div class="flower-grid">'
-
-
-            for ten_hoa in sap_xep_hoa(st.session_state.kho_hoa_tong.keys()):
-
-                info = st.session_state.kho_hoa_tong[ten_hoa]
-
-                cap = info.get("cap", "")
-
-
-                loc = chon_cap.split(":")[0]
-
-                loc = (
-                    loc.replace("🌈 ", "")
-                    .replace("🔴 ", "")
-                    .replace("🟠 ", "")
-                    .replace("🟣 ", "")
-                    .replace("🔵 ", "")
-                    .replace("🟢 ", "")
-                )
-
-
-                if loc != "Tất cả" and cap != loc:
-                    continue
-
+            for ten_hoa, info in st.session_state.kho_hoa_tong.items():
 
                 owners = [
                     tv
@@ -1571,135 +1504,204 @@ with tab_suu_tap:
                     if ten_hoa in hoa_list
                 ]
 
-
                 if owners:
+                    cap = info.get("cap", "")
+
+                    if cap in dem_cap:
+                        dem_cap[cap] += 1
 
 
-                    link_anh = anh_html(info["anh"])
+            tong_hoa = sum(dem_cap.values())
 
 
-                    if cap == "Đỏ":
-                        mau = "#ef4444"
-
-                    elif cap == "Tím":
-                        mau = "#c084fc"
-
-                    elif cap == "Xanh lá":
-                        mau = "#22c55e"
-
-                    elif cap == "Xanh dương":
-                        mau = "#38bdf8"
-
-                    elif cap == "Cam":
-                        mau = "#f59e0b"
-
-                    else:
-                        mau = "#d6a83d"
-
-
-                    html += f"""
-                    <div class="flower-box">
-                        <img src="{link_anh}" 
-                        style="border:5px solid {mau};">
-
-                        <div class="flower-name">
-                            {ten_hoa}
-                        </div>
-                    </div>
-                    """
-
-
-            html += "</div>"
-
-
-            components.html(
-                GRID_STYLE + html,
-                height=450,
-                scrolling=True
+            chon_cap = st.radio(
+                "Lọc cấp:",
+                [
+                    f"🌈 Tất cả: {tong_hoa}",
+                    f"🔴 Đỏ: {dem_cap['Đỏ']}",
+                    f"🟠 Cam: {dem_cap['Cam']}",
+                    f"🟣 Tím: {dem_cap['Tím']}",
+                    f"🔵 Xanh dương: {dem_cap['Xanh dương']}",
+                    f"🟢 Xanh lá: {dem_cap['Xanh lá']}"
+                ],
+                horizontal=True,
+                key="loc_cap_toan_hoi"
             )
 
-    with tab3:
 
-        st.markdown("## 🔍 Tra cứu hoa")
+            if not st.session_state.kho_hoa_tong:
 
-        tim_so_huu = st.text_input(
-            "Nhập tên hoa",
-            key="tim_so_huu_tra_cuu"
-        )
-
-        if tim_so_huu:
-
-            ds_tim = []
-
-            for ten_hoa in st.session_state.kho_hoa_tong.keys():
-
-                if tim_so_huu.lower() in ten_hoa.lower():
-                    ds_tim.append(ten_hoa)
-
-
-            if ds_tim:
-
-                hoa_chon = st.selectbox(
-                    f"🌺 Tìm thấy {len(ds_tim)} hoa",
-                    ds_tim,
-                    key="chon_hoa_tra_cuu"
+                st.markdown(
+                    "<p style='font-size:13px;'>Chưa có hoa nào.</p>",
+                    unsafe_allow_html=True
                 )
 
-                ds_co = []
-
-                for tv, hoa_list in du_lieu_hoi_dang_dung.items():
-
-                    if hoa_chon in hoa_list:
-                        ds_co.append(tv)
-
-
-                st.success(
-                    f"🌺 {hoa_chon} - Có {len(ds_co)} thành viên sở hữu"
-                )
-
-                for tv in ds_co:
-                    st.markdown(
-                        f"""
-                        <p style="
-                            color:#000000 !important;
-                            font-weight:800 !important;
-                            font-size:16px !important;
-                            margin:6px 0;
-                        ">
-                        👤 {tv}
-                        </p>
-                        """,
-                        unsafe_allow_html=True
-                    )
 
             else:
 
-                st.warning("❌ Không tìm thấy hoa")
-with tab_thong_tin:
-
-    st.markdown(
-        """
-        <div style="
-        text-align:center;
-        padding:20px;
-        font-size:16px;
-        ">
+                html = '<div class="flower-grid">'
 
 
-        <p>
-        👑 Sáng tạo bởi: <b>Đức Tài</b><br><br>
+                for ten_hoa in sap_xep_hoa(st.session_state.kho_hoa_tong.keys()):
 
-        📱 Điện thoại: <b>0373.30.30.55</b><br><br>
+                    info = st.session_state.kho_hoa_tong[ten_hoa]
 
-        🌺 Phiên bản: <b>1.0</b><br>
+                    cap = info.get("cap", "")
 
-        💻 Ứng dụng quản lý hoa hội
-        </p>
 
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+                    loc = chon_cap.split(":")[0]
+
+                    loc = (
+                        loc.replace("🌈 ", "")
+                        .replace("🔴 ", "")
+                        .replace("🟠 ", "")
+                        .replace("🟣 ", "")
+                        .replace("🔵 ", "")
+                        .replace("🟢 ", "")
+                    )
+
+
+                    if loc != "Tất cả" and cap != loc:
+                        continue
+
+
+                    owners = [
+                        tv
+                        for tv, hoa_list
+                        in du_lieu_hoi_dang_dung.items()
+                        if ten_hoa in hoa_list
+                    ]
+
+
+                    if owners:
+
+
+                        link_anh = anh_html(info["anh"])
+
+
+                        if cap == "Đỏ":
+                            mau = "#ef4444"
+
+                        elif cap == "Tím":
+                            mau = "#c084fc"
+
+                        elif cap == "Xanh lá":
+                            mau = "#22c55e"
+
+                        elif cap == "Xanh dương":
+                            mau = "#38bdf8"
+
+                        elif cap == "Cam":
+                            mau = "#f59e0b"
+
+                        else:
+                            mau = "#d6a83d"
+
+
+                        html += f"""
+                        <div class="flower-box">
+                            <img src="{link_anh}" 
+                            style="border:5px solid {mau};">
+
+                            <div class="flower-name">
+                                {ten_hoa}
+                            </div>
+                        </div>
+                        """
+
+
+                html += "</div>"
+
+
+                components.html(
+                    GRID_STYLE + html,
+                    height=450,
+                    scrolling=True
+                )
+
+        with tab3:
+
+            st.markdown("## 🔍 Tra cứu hoa")
+
+            tim_so_huu = st.text_input(
+                "Nhập tên hoa",
+                key="tim_so_huu_tra_cuu"
+            )
+
+            if tim_so_huu:
+
+                ds_tim = []
+
+                for ten_hoa in st.session_state.kho_hoa_tong.keys():
+
+                    if tim_so_huu.lower() in ten_hoa.lower():
+                        ds_tim.append(ten_hoa)
+
+
+                if ds_tim:
+
+                    hoa_chon = st.selectbox(
+                        f"🌺 Tìm thấy {len(ds_tim)} hoa",
+                        ds_tim,
+                        key="chon_hoa_tra_cuu"
+                    )
+
+                    ds_co = []
+
+                    for tv, hoa_list in du_lieu_hoi_dang_dung.items():
+
+                        if hoa_chon in hoa_list:
+                            ds_co.append(tv)
+
+
+                    st.success(
+                        f"🌺 {hoa_chon} - Có {len(ds_co)} thành viên sở hữu"
+                    )
+
+                    for tv in ds_co:
+                        st.markdown(
+                            f"""
+                            <p style="
+                                color:#000000 !important;
+                                font-weight:800 !important;
+                                font-size:16px !important;
+                                margin:6px 0;
+                            ">
+                            👤 {tv}
+                            </p>
+                            """,
+                            unsafe_allow_html=True
+                        )
+
+                else:
+
+                    st.warning("❌ Không tìm thấy hoa")
+if st.session_state.quyen != "admin":    
+    with tab_thong_tin:
+
+        st.markdown(
+            """
+            <div style="
+            text-align:center;
+            padding:20px;
+            font-size:16px;
+            ">
+
+
+            <p>
+            👑 Sáng tạo bởi: <b>Đức Tài</b><br><br>
+
+            📱 Điện thoại: <b>0373.30.30.55</b><br><br>
+
+            🌺 Phiên bản: <b>1.0</b><br>
+
+            💻 Ứng dụng quản lý hoa hội
+            </p>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 # ==================================================
 # 👥 QUẢN LÝ TÀI KHOẢN KHÁCH
 # ==================================================
