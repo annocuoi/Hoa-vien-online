@@ -1453,7 +1453,7 @@ with tab_suu_tap:
                
                 hoa_thu_hoi = st.selectbox(
                     "↩️ Chọn hoa cần thu hồi",
-                    ["-- Chọn hoa --"] + kho_hoa_tv,
+                    ["-- Chọn hoa --"] + list(kho_hoa_tv),
                     key="chon_thu_hoi"
                 )
     
