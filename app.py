@@ -503,7 +503,10 @@ if not st.session_state.da_dang_nhap:
             mat_khau_nhap = st.text_input("Mật khẩu", type="password", placeholder="Nhập mật khẩu...", label_visibility="collapsed")
             
             if st.button("🔓 Đăng Nhập", use_container_width=True):
-                if ten_dang_nhap in TAI_KHOAN and mat_khau_nhap == TAI_KHOAN[ten_dang_nhap]["pass"]:
+                if (
+                    ten_dang_nhap in TAI_KHOAN
+                    and mat_khau_nhap == TAI_KHOAN[ten_dang_nhap].get("pass")
+                ):
 
                     st.session_state.da_dang_nhap = True
 
@@ -584,8 +587,17 @@ if "tai_khoan" not in st.session_state:
 
     st.session_state.tai_khoan = du_lieu_goc.get(
         "tai_khoan",
-        TAI_KHOAN_MAC_DINH.copy()
+        {}
     )
+
+
+# nếu mất admin thì tự thêm lại
+if "admin" not in st.session_state.tai_khoan:
+
+    st.session_state.tai_khoan["admin"] = {
+        "pass": "111111",
+        "quyen": "admin"
+    }
 
 
 TAI_KHOAN = st.session_state.tai_khoan
