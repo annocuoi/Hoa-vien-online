@@ -472,16 +472,13 @@ TAI_KHOAN = {
 if "quyen" not in st.session_state:
     st.session_state.quyen = None
 
-if "user_hien_tai" not in st.session_state:
-    st.session_state.user_hien_tai = None
-
 if "GITHUB_TOKEN" in st.secrets:
     GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
 else:
     GITHUB_TOKEN = ""
 
-REPO_NAME = "annocuoi/Hoavienonline"
-FILE_PATH = "du_lieu_hoa.json"
+REPO_NAME = "annocuoi/quan-ly-hoa-vien"
+FILE_PATH = "du_lieu_hoi_do_kiep.json"
 BRANCH = "main"
 
 HEADERS = {
@@ -515,8 +512,6 @@ if not st.session_state.da_dang_nhap:
                     st.session_state.da_dang_nhap = True
 
                     st.session_state.quyen = TAI_KHOAN[ten_dang_nhap]["quyen"]
-
-                    st.session_state.user_hien_tai = ten_dang_nhap
 
                     st.rerun()
 
@@ -1633,19 +1628,6 @@ with tab_suu_tap:
 
                 st.warning("❌ Không tìm thấy hoa")
 with tab_thong_tin:
-
-    if st.session_state.quyen != "admin":
-        du_lieu_tai_ve = {
-            "tai_khoan": st.session_state.user_hien_tai,
-            "du_lieu_hoi": st.session_state.du_lieu_thanh_vien
-        }
-        st.download_button(
-            "💾 Tải dữ liệu hội về máy",
-            data=json.dumps(du_lieu_tai_ve, ensure_ascii=False, indent=4),
-            file_name="du_lieu_hoi_cua_toi.json",
-            mime="application/json",
-            use_container_width=True
-        )
 
     st.markdown(
         """
