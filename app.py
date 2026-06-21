@@ -490,34 +490,34 @@ if "da_dang_nhap" not in st.session_state:
     st.session_state.da_dang_nhap = False
 
 if not st.session_state.da_dang_nhap:
-    st.markdown("<h2 style='text-align: center; color: #60A5FA; font-size: 24px;'>🔒 HỆ THỐNG BẢO MẬT</h2>", unsafe_allow_html=True)
-    _, col_center, _ = st.columns([1, 1.5, 1])
-    with col_center:
-        with st.container(border=True):
-            st.markdown("<p style='font-size: 14px;'>Vui lòng nhập mật khẩu chính xác để truy cập.</p>", unsafe_allow_html=True)
-            ten_dang_nhap = st.text_input(
-                "Tài khoản",
-                placeholder="Nhập tài khoản...",
-                label_visibility="collapsed"
-            )
-            mat_khau_nhap = st.text_input("Mật khẩu", type="password", placeholder="Nhập mật khẩu...", label_visibility="collapsed")
-            
-            if st.button("🔓 Đăng Nhập", use_container_width=True):
-                if (
-                    ten_dang_nhap in TAI_KHOAN
-                    and mat_khau_nhap == TAI_KHOAN[ten_dang_nhap].get("pass")
-                ):
 
-                    st.session_state.da_dang_nhap = True
+    st.markdown("<h2 style='text-align:center'>🔐 HỆ THỐNG BẢO MẬT</h2>", unsafe_allow_html=True)
 
-                    st.session_state.quyen = TAI_KHOAN[ten_dang_nhap]["quyen"]
-                    st.session_state.ten_tai_khoan = ten_dang_nhap
+    ten_dang_nhap = st.text_input(
+        "Tài khoản",
+        placeholder="Nhập tài khoản..."
+    )
 
-                    st.rerun()
+    mat_khau_nhap = st.text_input(
+        "Mật khẩu",
+        type="password",
+        placeholder="Nhập mật khẩu..."
+    )
 
-                else:
+    if st.button("🔐 Đăng Nhập", use_container_width=True):
 
-                    st.error("Sai tài khoản hoặc mật khẩu")
+        if ten_dang_nhap in TAI_KHOAN and mat_khau_nhap == TAI_KHOAN[ten_dang_nhap]["pass"]:
+
+            st.session_state.da_dang_nhap = True
+            st.session_state.ten_tai_khoan = ten_dang_nhap
+            st.session_state.quyen = TAI_KHOAN[ten_dang_nhap]["quyen"]
+
+            st.rerun()
+
+        else:
+            st.error("Sai tài khoản hoặc mật khẩu")
+
+    st.stop()
 
     st.stop()
 
