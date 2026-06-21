@@ -1047,118 +1047,118 @@ if st.session_state.quyen == "admin":
 # ====================================================
 # KHU VỰC 2: CẤU HÌNH THÀNH VIÊN VÀ CẤP PHÁT
 # ====================================================
+if st.session_state.quyen != "admin":
+    with tab_hoi_vien:
 
-with tab_hoi_vien:
-
-    st.markdown(
-        "<h3>👥 2. Hội Viên & Cấp Phát</h3>",
-        unsafe_allow_html=True
-    )
-
-    col_tv1, col_tv2 = st.columns(2)
-
-
-    # =====================
-    # BÊN TRÁI: HỘI VIÊN
-    # =====================
-    with col_tv1:
-
-        with st.expander(
-            "➕ Quản lý hội viên",
-            expanded=False
-        ):
-            if "key_them_tv" not in st.session_state:
-                st.session_state.key_them_tv = 0
-            ten_tv_moi = st.text_input(
-                "➕ Nhập hội viên mới",
-                placeholder="Nhập tên...",
-                key=f"them_thanh_vien_{st.session_state.key_them_tv}"
-            )
-            
-            if st.button(
-                "➕ Thêm hội viên",
-                use_container_width=True
-            ):
-                ten_tv_clean = ten_tv_moi.strip()
-
-                if ten_tv_clean:
-                    du_lieu_hoi_dang_dung[ten_tv_clean] = []
-
-                    if luu_du_lieu_len_github():
-                        st.session_state.key_them_tv += 1
-                        st.rerun()
-
-            tv_xoa = st.selectbox(
-                "🗑 Xóa hội viên",
-                ["-- Chọn --"] + list(du_lieu_hoi_dang_dung.keys()),
-                key="xoa_tv"
-            )
-
-            if st.button(
-                "❌ Xóa",
-                use_container_width=True
-            ):
-                if tv_xoa != "-- Chọn --":
-                    del du_lieu_hoi_dang_dung[tv_xoa]
-
-                    if luu_du_lieu_len_github():
-                        st.rerun()
-
-
-    # =====================
-    # BÊN PHẢI: CẤP HOA
-    # =====================
-    with col_tv2:
-
-        st.markdown("## 🪷 Thêm Hoa Cho Hội Viên")
-
-        danh_sach_tv = list(
-            du_lieu_hoi_dang_dung.keys()
+        st.markdown(
+            "<h3>👥 2. Hội Viên & Cấp Phát</h3>",
+            unsafe_allow_html=True
         )
 
-        tv_chon = st.selectbox(
-            "👤 Chọn hội viên",
-            danh_sach_tv,
-            key="cap_tv"
-        )
-
-        # lấy hoa hội viên đang có
-        hoa_da_co = du_lieu_hoi_dang_dung.get(
-            tv_chon,
-            []
-        )
-
-        # lọc hoa chưa có
-        hoa_chua_co = [
-            hoa
-            for hoa in st.session_state.kho_hoa_tong.keys()
-            if hoa not in hoa_da_co
-        ]
+        col_tv1, col_tv2 = st.columns(2)
 
 
-        if len(hoa_chua_co) > 0:
+        # =====================
+        # BÊN TRÁI: HỘI VIÊN
+        # =====================
+        with col_tv1:
 
-            hoa_chon = st.selectbox(
-                "🌸 Chọn hoa",
-                hoa_chua_co,
-                key="cap_hoa"
-            )
-
-            if st.button(
-                "🪷 Thêm Hoa",
-                use_container_width=True
+            with st.expander(
+                "➕ Quản lý hội viên",
+                expanded=False
             ):
+                if "key_them_tv" not in st.session_state:
+                    st.session_state.key_them_tv = 0
+                ten_tv_moi = st.text_input(
+                    "➕ Nhập hội viên mới",
+                    placeholder="Nhập tên...",
+                    key=f"them_thanh_vien_{st.session_state.key_them_tv}"
+                )
+                
+                if st.button(
+                    "➕ Thêm hội viên",
+                    use_container_width=True
+                ):
+                    ten_tv_clean = ten_tv_moi.strip()
 
-                du_lieu_hoi_dang_dung[tv_chon].append(
-                    hoa_chon
+                    if ten_tv_clean:
+                        du_lieu_hoi_dang_dung[ten_tv_clean] = []
+
+                        if luu_du_lieu_len_github():
+                            st.session_state.key_them_tv += 1
+                            st.rerun()
+
+                tv_xoa = st.selectbox(
+                    "🗑 Xóa hội viên",
+                    ["-- Chọn --"] + list(du_lieu_hoi_dang_dung.keys()),
+                    key="xoa_tv"
                 )
 
-                if luu_du_lieu_len_github():
-                    st.rerun()
+                if st.button(
+                    "❌ Xóa",
+                    use_container_width=True
+                ):
+                    if tv_xoa != "-- Chọn --":
+                        del du_lieu_hoi_dang_dung[tv_xoa]
 
-        else:
+                        if luu_du_lieu_len_github():
+                            st.rerun()
 
-            st.info("✅ Hội viên đã có tất cả hoa")
+
+        # =====================
+        # BÊN PHẢI: CẤP HOA
+        # =====================
+        with col_tv2:
+
+            st.markdown("## 🪷 Thêm Hoa Cho Hội Viên")
+
+            danh_sach_tv = list(
+                du_lieu_hoi_dang_dung.keys()
+            )
+
+            tv_chon = st.selectbox(
+                "👤 Chọn hội viên",
+                danh_sach_tv,
+                key="cap_tv"
+            )
+
+            # lấy hoa hội viên đang có
+            hoa_da_co = du_lieu_hoi_dang_dung.get(
+                tv_chon,
+                []
+            )
+
+            # lọc hoa chưa có
+            hoa_chua_co = [
+                hoa
+                for hoa in st.session_state.kho_hoa_tong.keys()
+                if hoa not in hoa_da_co
+            ]
+
+
+            if len(hoa_chua_co) > 0:
+
+                hoa_chon = st.selectbox(
+                    "🌸 Chọn hoa",
+                    hoa_chua_co,
+                    key="cap_hoa"
+                )
+
+                if st.button(
+                    "🪷 Thêm Hoa",
+                    use_container_width=True
+                ):
+
+                    du_lieu_hoi_dang_dung[tv_chon].append(
+                        hoa_chon
+                    )
+
+                    if luu_du_lieu_len_github():
+                        st.rerun()
+
+            else:
+
+                st.info("✅ Hội viên đã có tất cả hoa")
 with tab_xep_hang:
 
     st.markdown(
