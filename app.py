@@ -591,13 +591,49 @@ if "tai_khoan" not in st.session_state:
     )
 
 
-# nếu mất admin thì tự thêm lại
 if "admin" not in st.session_state.tai_khoan:
 
     st.session_state.tai_khoan["admin"] = {
         "pass": "111111",
         "quyen": "admin"
     }
+
+
+TAI_KHOAN = st.session_state.tai_khoan
+
+
+if not st.session_state.da_dang_nhap:
+
+    ten_dang_nhap = st.text_input(
+        "Tài khoản",
+        placeholder="Nhập tài khoản..."
+    )
+
+    mat_khau_nhap = st.text_input(
+        "Mật khẩu",
+        type="password",
+        placeholder="Nhập mật khẩu..."
+    )
+
+
+    if st.button("🔐 Đăng Nhập", use_container_width=True):
+
+        if (
+            ten_dang_nhap in TAI_KHOAN
+            and mat_khau_nhap == TAI_KHOAN[ten_dang_nhap].get("pass")
+        ):
+
+            st.session_state.da_dang_nhap = True
+            st.session_state.ten_tai_khoan = ten_dang_nhap
+            st.session_state.quyen = TAI_KHOAN[ten_dang_nhap]["quyen"]
+
+            st.rerun()
+
+        else:
+            st.error("Sai tài khoản hoặc mật khẩu")
+
+
+    st.stop()
 
 
 TAI_KHOAN = st.session_state.tai_khoan
