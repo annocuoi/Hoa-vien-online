@@ -1078,19 +1078,19 @@ with tab_hoi_vien:
                 placeholder="Nhập tên...",
                 key=f"them_thanh_vien_{st.session_state.key_them_tv}"
             )
-            if st.session_state.quyen == "admin":
-                if st.button(
-                    "➕ Thêm hội viên",
-                    use_container_width=True
-                ):
-                    ten_tv_clean = ten_tv_moi.strip()
+            
+            if st.button(
+                "➕ Thêm hội viên",
+                use_container_width=True
+            ):
+                ten_tv_clean = ten_tv_moi.strip()
 
-                    if ten_tv_clean:
-                        du_lieu_hoi_dang_dung[ten_tv_clean] = []
+                if ten_tv_clean:
+                    du_lieu_hoi_dang_dung[ten_tv_clean] = []
 
-                        if luu_du_lieu_len_github():
-                            st.session_state.key_them_tv += 1
-                            st.rerun()
+                    if luu_du_lieu_len_github():
+                        st.session_state.key_them_tv += 1
+                        st.rerun()
 
             tv_xoa = st.selectbox(
                 "🗑 Xóa hội viên",
@@ -1450,33 +1450,33 @@ with tab_suu_tap:
     
                 st.write("")
     
-                if st.session_state.quyen == "admin":
-                    hoa_thu_hoi = st.selectbox(
-                        "↩️ Chọn hoa cần thu hồi",
-                        ["-- Chọn hoa --"] + kho_hoa_tv,
-                        key="chon_thu_hoi"
-                    )
+               
+                hoa_thu_hoi = st.selectbox(
+                    "↩️ Chọn hoa cần thu hồi",
+                    ["-- Chọn hoa --"] + kho_hoa_tv,
+                    key="chon_thu_hoi"
+                )
     
-                if st.session_state.quyen == "admin":
-                    if st.button(
-                        "↩️ Thu hồi hoa",
-                        use_container_width=True
-                    ):
-        
-        
-                        if hoa_thu_hoi != "-- Chọn hoa --":
-        
-        
-                            du_lieu_hoi_dang_dung[tv_xem].remove(
-                                hoa_thu_hoi
-                            )
-        
-        
-                            if luu_du_lieu_len_github():
-        
-        
-                                st.rerun()
+               
+                if st.button(
+                    "↩️ Thu hồi hoa",
+                    use_container_width=True
+                ):
     
+    
+                    if hoa_thu_hoi != "-- Chọn hoa --":
+    
+    
+                        du_lieu_hoi_dang_dung[tv_xem].remove(
+                            hoa_thu_hoi
+                        )
+    
+    
+                        if luu_du_lieu_len_github():
+    
+    
+                            st.rerun()
+
     with tab2:
 
         # ==============================
