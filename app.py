@@ -281,6 +281,25 @@ st.markdown(
 
 GRID_STYLE = """
 <style>
+/* Ẩn menu Streamlit góc dưới */
+.st-emotion-cache-1wbqy5l {
+    display: none !important;
+}
+
+/* Ẩn deploy / feedback */
+.stDeployButton {
+    display: none !important;
+}
+
+/* Ẩn footer */
+footer {
+    visibility: hidden;
+}
+
+/* Ẩn menu */
+#MainMenu {
+    visibility: hidden;
+}
 html, body{
     overflow-x:hidden;
     max-width:100%;
