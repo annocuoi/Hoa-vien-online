@@ -493,7 +493,9 @@ with col_logout:
 # ======================================
 # CHỌN DỮ LIỆU THEO TÀI KHOẢN
 # ======================================
-
+# sửa lỗi thiếu tên tài khoản khi F5
+if "ten_tai_khoan" not in st.session_state:
+    st.session_state.ten_tai_khoan = "admin"
 if "du_lieu_thanh_vien" not in st.session_state:
     st.session_state.du_lieu_thanh_vien = {}
 
