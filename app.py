@@ -489,19 +489,23 @@ API_URL = f"https://api.github.com/repos/{REPO_NAME}/contents/{FILE_PATH}"
 if "da_dang_nhap" not in st.session_state:
     st.session_state.da_dang_nhap = False
 
-# lấy tài khoản đăng nhập
+# ==========================
+# LẤY TÀI KHOẢN ĐĂNG NHẬP
+# ==========================
+
 if "tai_khoan" not in st.session_state:
-    TAI_KHOAN_MAC_DINH = {
-        "admin": {
-            "pass": "111111",
-            "quyen": "admin"
-        }
-    }
+
+    du_lieu_goc = tai_du_lieu_tu_github()
+
+    st.session_state.tai_khoan = du_lieu_goc.get(
+        "tai_khoan",
+        TAI_KHOAN_MAC_DINH.copy()
+    )
+
 
 TAI_KHOAN = st.session_state.tai_khoan
     
 
-TAI_KHOAN = st.session_state.tai_khoan    
 
 if not st.session_state.da_dang_nhap:
     st.markdown("<h2 style='text-align: center; color: #60A5FA; font-size: 24px;'>🔒 HỆ THỐNG BẢO MẬT</h2>", unsafe_allow_html=True)
