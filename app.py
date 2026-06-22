@@ -544,7 +544,7 @@ if not st.session_state.da_dang_nhap:
 
                 if info.get("quyen") == "hoi":
 
-                    data_hoi = tai_du_lieu_hoi(ten_hoi)
+                    data_hoi = doc_du_lieu_hoi(ten_hoi)
 
                     tk_xem = data_hoi.get("_tai_khoan_xem", {})
 
@@ -661,7 +661,7 @@ def tao_ten_file_hoi(ten_hoi):
 
 
 
-def tai_du_lieu_hoi(ten_hoi):
+def doc_du_lieu_hoi(ten_hoi):
 
     try:
 
@@ -880,7 +880,7 @@ elif st.session_state.quyen == "hoi":
         or st.session_state.get("hoi_dang_mo") != ten
     ):
 
-        st.session_state.du_lieu_hoi = tai_du_lieu_hoi(
+        st.session_state.du_lieu_hoi = doc_du_lieu_hoi(
             ten
         )
 
@@ -897,7 +897,7 @@ elif st.session_state.quyen == "xem":
 
     hoi = st.session_state.tai_khoan[tk]["chu_so_huu"]
 
-    du_lieu_hoi_dang_dung = tai_du_lieu_hoi(hoi)
+    du_lieu_hoi_dang_dung = doc_du_lieu_hoi(hoi)
 
 st.markdown(
 """
@@ -2370,7 +2370,7 @@ if st.session_state.quyen == "admin":
 
             if info.get("quyen") == "hoi":
 
-                du_lieu_hoi = tai_du_lieu_hoi(ten)
+                du_lieu_hoi = doc_du_lieu_hoi(ten)
 
                 so_tv = len(du_lieu_hoi)
                 st.markdown(
@@ -2398,7 +2398,7 @@ if st.session_state.quyen == "hoi":
         ten_hoi = st.session_state.ten_tai_khoan
 
 
-        du_lieu_hoi_dang_dung = tai_du_lieu_hoi(
+        du_lieu_hoi_dang_dung = doc_du_lieu_hoi(
             ten_hoi
         )
 
