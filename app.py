@@ -2179,7 +2179,7 @@ if st.session_state.quyen == "admin":
                 st.session_state.thong_bao
             )
 
-            del st.session_state.thong_bao 
+            del st.session_state.thong_bao
         st.markdown("### 👥 Quản lý tài khoản hội")
         if "reset_tao_hoi" in st.session_state:
             st.session_state.tao_user = ""
@@ -2378,11 +2378,11 @@ if st.session_state.quyen == "admin":
 
                 if luu_du_lieu_len_github():
 
-                    st.success(
-                        f"Đã xóa hội {khach_xoa}"
+                    st.session_state.thong_bao = (
+                        f"✅ Đã xóa hội {khach_xoa}"
                     )
 
-                st.rerun()
+                    st.rerun()
 if st.session_state.quyen == "admin":
 
     with tab_kiem_soat:
