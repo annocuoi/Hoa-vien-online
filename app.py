@@ -2173,13 +2173,17 @@ if st.session_state.quyen != "admin":
 # ==================================================
 if st.session_state.quyen == "admin":
     with tab_khach:
-        if "thong_bao" in st.session_state:
+        if "thong_bao_xoa" in st.session_state:
 
             st.success(
-                st.session_state.thong_bao
+                st.session_state.thong_bao_xoa
             )
 
-            del st.session_state.thong_bao
+            time.sleep(3)
+
+            del st.session_state.thong_bao_xoa
+
+            st.rerun()
         st.markdown("### 👥 Quản lý tài khoản hội")
         if "reset_tao_hoi" in st.session_state:
             st.session_state.tao_user = ""
@@ -2378,7 +2382,7 @@ if st.session_state.quyen == "admin":
 
                 if luu_du_lieu_len_github():
 
-                    st.session_state.thong_bao = (
+                    st.session_state.thong_bao_xoa = (
                         f"✅ Đã xóa hội {khach_xoa}"
                     )
 
