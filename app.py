@@ -1800,12 +1800,12 @@ if st.session_state.quyen == "admin":
 
         ten_moi = st.text_input(
             "Tên tài khoản hội",
-            key="tao_user"
+            key="tao_user_input"
         )
 
         mat_khau_moi = st.text_input(
             "Mật khẩu",
-            key="tao_pass"
+            key="tao_pass_input"
         )
 
         if st.button("➕ Tạo tài khoản hội"):
@@ -1831,11 +1831,7 @@ if st.session_state.quyen == "admin":
 
                 st.success("✅ Đã tạo tài khoản hội")
 
-
-                # xóa trắng ô nhập
-                st.session_state.tao_user = ""
-                st.session_state.tao_pass = ""
-
+                time.sleep(1)
 
                 st.rerun()
         # =========================
