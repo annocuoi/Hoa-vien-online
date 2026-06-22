@@ -509,8 +509,6 @@ if len(st.session_state.tai_khoan) == 0:
         "ngay_tao": datetime.now().strftime("%d/%m/%Y")
     }
 
-    luu_du_lieu_len_github()
-
 if not st.session_state.da_dang_nhap:
 
     ten_dang_nhap = st.text_input(
@@ -647,14 +645,28 @@ if st.session_state.quyen == "admin":
 
     du_lieu_hoi_dang_dung = {}
 
-else:
+
+elif st.session_state.quyen == "hoi":
 
     ten = st.session_state.ten_tai_khoan
 
     if ten not in st.session_state.du_lieu_thanh_vien:
         st.session_state.du_lieu_thanh_vien[ten] = {}
 
-    du_lieu_hoi_dang_dung = st.session_state.du_lieu_thanh_vien[ten]
+    du_lieu_hoi_dang_dung = (
+        st.session_state.du_lieu_thanh_vien[ten]
+    )
+
+
+elif st.session_state.quyen == "xem":
+
+    tk = st.session_state.ten_tai_khoan
+
+    hoi = st.session_state.tai_khoan[tk]["chu_so_huu"]
+
+    du_lieu_hoi_dang_dung = (
+        st.session_state.du_lieu_thanh_vien[hoi]
+    )
 
 st.markdown(
 """
@@ -720,12 +732,24 @@ if st.session_state.quyen == "admin":
             "📊 Kiểm soát"
         ]
     )
-else:
+elif st.session_state.quyen == "hoi":
 
-    tab_suu_tap, tab_hoi_vien, tab_xep_hang, tab_thong_tin = st.tabs(
+    tab_suu_tap, tab_hoi_vien, tab_xep_hang, tab_thong_tin, tab_tai_khoan_xem = st.tabs(
         [
             "🌸 Bộ sưu tập",
             "👥 Hội viên",
+            "🏆 Xếp hạng",
+            "ℹ️ Thông tin",
+            "🔑 TK xem"
+        ]
+    )
+
+
+elif st.session_state.quyen == "xem":
+
+    tab_suu_tap, tab_xep_hang, tab_thong_tin = st.tabs(
+        [
+            "🌸 Bộ sưu tập",
             "🏆 Xếp hạng",
             "ℹ️ Thông tin"
         ]
@@ -1046,7 +1070,7 @@ if st.session_state.quyen == "admin":
 # ====================================================
 # KHU VỰC 2: CẤU HÌNH THÀNH VIÊN VÀ CẤP PHÁT
 # ====================================================
-if st.session_state.quyen != "admin":
+if st.session_state.quyen == "hoi":
     with tab_hoi_vien:
 
         st.markdown(
@@ -1458,32 +1482,32 @@ if st.session_state.quyen != "admin":
         
                     st.write("")
         
-                
-                    hoa_thu_hoi = st.selectbox(
-                        "↩️ Chọn hoa cần thu hồi",
-                        ["-- Chọn hoa --"] + list(kho_hoa_tv),
-                        key="chon_thu_hoi"
-                    )
+                    if st.session_state.quyen == "hoi":
+                        hoa_thu_hoi = st.selectbox(
+                            "↩️ Chọn hoa cần thu hồi",
+                            ["-- Chọn hoa --"] + list(kho_hoa_tv),
+                            key="chon_thu_hoi"
+                        )
         
                 
-                    if st.button(
-                        "↩️ Thu hồi hoa",
-                        use_container_width=True
-                    ):
-        
-        
-                        if hoa_thu_hoi != "-- Chọn hoa --":
-        
-        
-                            du_lieu_hoi_dang_dung[tv_xem].remove(
-                                hoa_thu_hoi
-                            )
-        
-        
-                            if luu_du_lieu_len_github():
-        
-        
-                                st.rerun()
+                        if st.button(
+                            "↩️ Thu hồi hoa",
+                            use_container_width=True
+                        ):
+            
+            
+                            if hoa_thu_hoi != "-- Chọn hoa --":
+            
+            
+                                du_lieu_hoi_dang_dung[tv_xem].remove(
+                                    hoa_thu_hoi
+                                )
+            
+            
+                                if luu_du_lieu_len_github():
+            
+            
+                                    st.rerun()
 
         with tab2:
 
@@ -1706,6 +1730,66 @@ if st.session_state.quyen != "admin":
             """,
             unsafe_allow_html=True
         )
+        # ==========================
+        # 💾 SAO LƯU DỮ LIỆU HỘI
+        # ==========================
+
+        if st.session_state.quyen == "hoi":
+
+            st.write("---")
+
+            st.subheader("💾 Sao lưu dữ liệu hội")
+
+            du_lieu_xuat = {}
+
+            for ten_tv, ds_hoa in du_lieu_hoi_dang_dung.items():
+
+                du_lieu_xuat[ten_tv] = ds_hoa
+
+
+            file_json = json.dumps(
+                du_lieu_xuat,
+                ensure_ascii=False,
+                indent=4
+            )
+
+
+            st.download_button(
+                label="⬇️ Tải dữ liệu về máy",
+                data=file_json,
+                file_name=f"{st.session_state.ten_tai_khoan}.json",
+                mime="application/json",
+                use_container_width=True
+            )
+            st.write("---")
+
+            st.subheader("📂 Khôi phục dữ liệu hội")
+
+            file_up = st.file_uploader(
+                "Chọn file sao lưu",
+                type=["json"]
+            )
+
+            if file_up is not None:
+
+                try:
+                    du_lieu_nhap = json.load(file_up)
+
+                    if st.button("♻️ Khôi phục dữ liệu", use_container_width=True):
+
+                        # ghi đè dữ liệu hội hiện tại
+                        st.session_state.du_lieu_thanh_vien[
+                            st.session_state.ten_tai_khoan
+                        ] = du_lieu_nhap
+
+                        luu_du_lieu_len_github()
+
+                        st.success("✅ Đã khôi phục dữ liệu")
+
+                        st.rerun()
+
+                except:
+                    st.error("❌ File không đúng định dạng")
 # ==================================================
 # 👥 QUẢN LÝ TÀI KHOẢN KHÁCH
 # ==================================================
@@ -1735,8 +1819,9 @@ if st.session_state.quyen == "admin":
             else:
                 st.session_state.tai_khoan[ten_moi] = {
                     "pass": mat_khau_moi,
-                    "quyen": "user",
-                    "ngay_tao": datetime.now().strftime("%d/%m/%Y")
+                    "quyen": "hoi",
+                    "ngay_tao": datetime.now().strftime("%d/%m/%Y"),
+
                 }
 
                 if ten_moi not in st.session_state.du_lieu_thanh_vien:
@@ -1746,6 +1831,92 @@ if st.session_state.quyen == "admin":
 
                 st.success("Đã tạo tài khoản khách")
                 st.rerun()
+        # =========================
+        # 🔑 ĐỔI MẬT KHẨU HỘI
+        # =========================
+
+        st.write("---")
+        st.markdown("### 🔑 Đổi mật khẩu hội")
+
+        ds_hoi = [
+            ten
+            for ten, info in st.session_state.tai_khoan.items()
+            if info.get("quyen") == "hoi"
+        ]
+
+
+        hoi_doi_pass = st.selectbox(
+            "Chọn hội",
+            ["-- Chọn --"] + ds_hoi,
+            key="doi_pass_hoi"
+        )
+
+
+        mk_hoi_moi = st.text_input(
+            "Mật khẩu mới cho hội",
+            type="password",
+            key="mk_hoi_moi"
+        )
+
+
+        if st.button(
+            "💾 Lưu mật khẩu hội",
+            use_container_width=True
+        ):
+
+            if hoi_doi_pass == "-- Chọn --":
+
+                st.warning("Chọn hội cần đổi")
+
+            elif mk_hoi_moi.strip() == "":
+
+                st.warning("Nhập mật khẩu mới")
+
+            else:
+
+                st.session_state.tai_khoan[hoi_doi_pass]["pass"] = mk_hoi_moi
+
+                if luu_du_lieu_len_github():
+
+                    st.success("Đã đổi mật khẩu hội")
+
+                    st.rerun()
+        # =========================
+        # 👁️ XÓA TK XEM CỦA HỘI
+        # =========================
+
+        st.write("---")
+        st.markdown("### 👁️ Xóa tài khoản xem")
+
+        ds_xem = [
+            tk
+            for tk, info in st.session_state.tai_khoan.items()
+            if info.get("quyen") == "xem"
+        ]
+
+
+        tk_xem_xoa = st.selectbox(
+            "Chọn tài khoản xem",
+            ["-- Chọn --"] + ds_xem,
+            key="xoa_tk_xem"
+        )
+
+
+        if st.button(
+            "❌ Xóa tài khoản xem",
+            use_container_width=True
+        ):
+
+            if tk_xem_xoa != "-- Chọn --":
+
+                del st.session_state.tai_khoan[tk_xem_xoa]
+
+                if luu_du_lieu_len_github():
+
+                    st.success("Đã xóa")
+
+                    st.rerun()
+        
         # =============================
         # 🔑 ĐỔI MẬT KHẨU ADMIN
         # =============================
@@ -1782,7 +1953,7 @@ if st.session_state.quyen == "admin":
         ds_khach = [
             ten
             for ten, info in st.session_state.tai_khoan.items()
-            if info.get("quyen") == "user"
+            if info.get("quyen") == "hoi"
         ]
 
         khach_xoa = st.selectbox(
@@ -1803,14 +1974,32 @@ if st.session_state.quyen == "admin":
 
             else:
 
-                # xóa tài khoản
+                # xóa tài khoản khách
                 del st.session_state.tai_khoan[khach_xoa]
 
 
-                # xóa dữ liệu của khách
+                # xóa dữ liệu hội viên của hội đó
                 if khach_xoa in st.session_state.du_lieu_thanh_vien:
 
                     del st.session_state.du_lieu_thanh_vien[khach_xoa]
+
+
+                # xóa luôn tài khoản xem thuộc hội đó
+                ds_xoa = []
+
+                for tk, info in st.session_state.tai_khoan.items():
+
+                    if (
+                        info.get("quyen") == "xem"
+                        and info.get("chu_so_huu") == khach_xoa
+                    ):
+
+                        ds_xoa.append(tk)
+
+
+                for tk in ds_xoa:
+
+                    del st.session_state.tai_khoan[tk]
 
 
                 if luu_du_lieu_len_github():
@@ -1831,7 +2020,7 @@ if st.session_state.quyen == "admin":
 
         for ten, info in st.session_state.tai_khoan.items():
 
-            if info.get("quyen") == "user":
+            if info.get("quyen") == "hoi":
                 tong_khach += 1
 
 
@@ -1843,7 +2032,7 @@ if st.session_state.quyen == "admin":
 
         for ten, info in st.session_state.tai_khoan.items():
 
-            if info.get("quyen") == "user":
+            if info.get("quyen") == "hoi":
 
                 so_tv = len(
                     st.session_state.du_lieu_thanh_vien.get(
@@ -1863,3 +2052,74 @@ if st.session_state.quyen == "admin":
                     ---
                     """
                 )
+
+# =========================
+# TÀI KHOẢN XEM CỦA HỘI
+# =========================
+
+if st.session_state.quyen == "hoi":
+
+    with tab_tai_khoan_xem:
+
+        st.subheader("🔑 Tài khoản xem cho thành viên")
+
+        ten_hoi = st.session_state.ten_tai_khoan
+
+
+        da_co = None
+
+        for tk, info in st.session_state.tai_khoan.items():
+
+            if (
+                info.get("quyen") == "xem"
+                and info.get("chu_so_huu") == ten_hoi
+            ):
+                da_co = tk
+
+
+        if da_co:
+
+            st.success(
+                f"Đang có tài khoản xem: {da_co}"
+            )
+
+
+        else:
+
+            tk_xem = st.text_input(
+                "Tên đăng nhập xem"
+            )
+
+            mk_xem = st.text_input(
+                "Mật khẩu",
+                type="password"
+            )
+
+
+            if st.button("➕ Tạo tài khoản xem"):
+
+                if tk_xem in st.session_state.tai_khoan:
+
+                    st.error(
+                        "Tên đăng nhập đã tồn tại"
+                    )
+
+                else:
+
+                    st.session_state.tai_khoan[tk_xem] = {
+
+                        "pass": mk_xem,
+
+                        "quyen": "xem",
+
+                        "chu_so_huu": ten_hoi,
+
+                        "ngay_tao": datetime.now().strftime("%d/%m/%Y")
+                    }
+
+
+                    luu_du_lieu_len_github()
+
+                    st.success("Đã tạo")
+
+                    st.rerun()
