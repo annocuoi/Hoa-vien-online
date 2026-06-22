@@ -1244,48 +1244,53 @@ if st.session_state.quyen != "admin":
                     cup = "🥇"
                     vien = "#ffd700"
                     do_day_vien = "5px"
+
                 elif so_top == 2:
                     cup = "🥈"
                     vien = "#c0c0c0"
                     do_day_vien = "4px"
+
                 elif so_top == 3:
                     cup = "🥉"
                     vien = "#cd7f32"
                     do_day_vien = "4px"
+
                 else:
                     cup = f"#{so_top}"
                     vien = "white"
                     do_day_vien = "2px"
 
 
-                html += f"""<div style="
-    border:{do_day_vien} solid {vien};
-    border-radius:8px;
-    width:140px;
-    height:140px;
-    background:rgba(255,255,255,0.85);
-    text-align:center;
-    font-size:14px;
-    line-height:1.15;
-    padding:3px;
-    overflow:hidden;
-    ">
+                html += f"""
+<div style="
+border:{do_day_vien} solid {vien};
+border-radius:8px;
+width:140px;
+height:140px;
+background:rgba(255,255,255,0.85);
+text-align:center;
+font-size:14px;
+line-height:1.15;
+padding:3px;
+overflow:hidden;
+">
 
-    <div style="font-size:12px">{cup}</div>
+<div style="font-size:12px">{cup}</div>
 
-    <b>{tv['ten']}</b><br>
+<b>{tv['ten']}</b><br>
 
-    🌺 {tv['tong']}<br>
+🌺 {tv['tong']}<br>
 
-    🔴{tv['cap']['Đỏ']}
-    🟠{tv['cap']['Cam']}<br>
+🔴 {tv['cap']['Đỏ']}
+🟠 {tv['cap']['Cam']}<br>
 
-    🟣{tv['cap']['Tím']}
-    🔵{tv['cap']['Xanh dương']}<br>
+🟣 {tv['cap']['Tím']}
+🔵 {tv['cap']['Xanh dương']}<br>
 
-    🟢{tv['cap']['Xanh lá']}
+🟢 {tv['cap']['Xanh lá']}
 
-    </div>"""
+</div>
+"""
 
                 so_top += 1
 
