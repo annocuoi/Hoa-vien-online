@@ -1829,7 +1829,14 @@ if st.session_state.quyen == "admin":
 
                 luu_du_lieu_len_github()
 
-                st.success("Đã tạo tài khoản hội")
+                st.success("✅ Đã tạo tài khoản hội")
+
+
+                # xóa trắng ô nhập
+                st.session_state.tao_user = ""
+                st.session_state.tao_pass = ""
+
+
                 st.rerun()
         # =========================
         # 🔑 ĐỔI MẬT KHẨU HỘI
