@@ -1397,8 +1397,8 @@ if st.session_state.quyen == "hoi":
 
                             st.session_state.dang_them_hoa = False
 
-                            st.warning(
-                                "⏳ Đang đồng bộ, thử lại sau"
+                            st.error(
+                                "❌ Lưu thất bại, kiểm tra mạng"
                             )
             else:
 
