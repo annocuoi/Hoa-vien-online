@@ -817,6 +817,9 @@ if "da_load_data" not in st.session_state:
         }
 
     st.session_state.da_load_data = True
+# chống mất session
+if "du_lieu_thanh_vien" not in st.session_state:
+    st.session_state.du_lieu_thanh_vien = {}
 
 # ==============================
 # CHỌN DATA SAU KHI ĐĂNG NHẬP
