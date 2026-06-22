@@ -1644,8 +1644,8 @@ overflow:hidden;
 🟠 {tv['cap']['Cam']}<br>
 
 🟣 {tv['cap']['Tím']}
-🔵 {tv['cap']['Xanh dương']}<br>
-🟢 {tv['cap']['Xanh lá']}
+🔵 {tv['cap']['Xanh dương']}
+🟢 {tv['cap']['Xanh lá']}<br>
 
 </div>
 """
