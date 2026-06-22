@@ -543,9 +543,6 @@ def doc_du_lieu_hoi(ten_hoi):
         return {}
 
     except Exception as e:
-
-        st.write("LỖI ĐỌC HỘ:", e)
-
         return {}
 
 if not st.session_state.da_dang_nhap:
@@ -587,15 +584,11 @@ if not st.session_state.da_dang_nhap:
 
                 data_hoi = doc_du_lieu_hoi(ten_hoi)
 
-                st.write("ĐANG KIỂM:", ten_hoi)
-                st.write(data_hoi)
-
                 tk_xem = data_hoi.get(
                     "_tai_khoan_xem",
                     {}
                 )
 
-                st.write("TK:", tk_xem)
 
                 if (
                     ten_dang_nhap == tk_xem.get("user")
