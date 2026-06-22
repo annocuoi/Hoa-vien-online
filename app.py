@@ -1950,7 +1950,6 @@ if st.session_state.quyen == "admin":
                     ten_moi,
                     {}
                 )
-                    st.session_state.du_lieu_thanh_vien[ten_moi] = {}
 
                 luu_du_lieu_len_github()
 
