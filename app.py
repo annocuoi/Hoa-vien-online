@@ -1939,9 +1939,19 @@ if st.session_state.quyen != "admin":
 
             st.subheader("📂 Khôi phục dữ liệu hội")
 
+            if "xoa_file_khoi_phuc" in st.session_state:
+
+                del st.session_state.xoa_file_khoi_phuc
+
+                st.session_state.key_file_kp = (
+                    st.session_state.get("key_file_kp",0) + 1
+                )
+
+
             file_up = st.file_uploader(
                 "Chọn file sao lưu",
-                type=["json"]
+                type=["json"],
+                key=f"file_kp_{st.session_state.get('key_file_kp',0)}"
             )
 
             if file_up is not None:
@@ -1971,6 +1981,9 @@ if st.session_state.quyen != "admin":
                                 st.success(
                                     "✅ Đã khôi phục dữ liệu"
                                 )
+                                time.sleep(2)
+
+                                st.session_state.xoa_file_khoi_phuc = True
 
                                 st.rerun()
 
