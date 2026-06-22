@@ -449,8 +449,7 @@ API_URL = f"https://api.github.com/repos/{REPO_NAME}/contents/{FILE_PATH}"
 def tai_du_lieu_tu_github():
     mac_dinh = {
         "kho_hoa_tong": {},
-        "tai_khoan": {},
-        "du_lieu_thanh_vien": {}
+        "tai_khoan": {}
     }
     try:
         url_doc = f"https://api.github.com/repos/{REPO_NAME}/contents/{FILE_PATH}?ref={BRANCH}&t={time.time()}"
@@ -583,9 +582,7 @@ def luu_du_lieu_len_github():
         data_to_save = {
             "kho_hoa_tong": kho_tong_copy,
 
-            "tai_khoan": st.session_state.tai_khoan,
-
-            "du_lieu_thanh_vien": st.session_state.du_lieu_thanh_vien
+            "tai_khoan": st.session_state.tai_khoan
         }
         
         json_str = json.dumps(data_to_save, ensure_ascii=False, indent=4)
@@ -722,7 +719,26 @@ def luu_du_lieu_hoi(ten_hoi, data):
         st.error(e)
 
         return False
+# ==========================
+# LƯU THEO QUYỀN
+# ==========================
 
+def luu_du_lieu():
+
+    if st.session_state.quyen == "admin":
+
+        return luu_du_lieu()
+
+
+    elif st.session_state.quyen == "hoi":
+
+        return luu_du_lieu_hoi(
+            st.session_state.ten_tai_khoan,
+            st.session_state.du_lieu_hoi
+        )
+
+
+    return False
 # Khởi tạo nạp dữ liệu
 # ==========================
 # KHỞI TẠO DỮ LIỆU
@@ -734,11 +750,6 @@ if "da_load_data" not in st.session_state:
 
     st.session_state.kho_hoa_tong = du_lieu_goc.get(
         "kho_hoa_tong",
-        {}
-    )
-
-    st.session_state.du_lieu_thanh_vien = du_lieu_goc.get(
-        "du_lieu_thanh_vien",
         {}
     )
 
@@ -769,13 +780,17 @@ elif st.session_state.quyen == "hoi":
 
     ten = st.session_state.ten_tai_khoan
 
-    if ten not in st.session_state.du_lieu_thanh_vien:
-        st.session_state.du_lieu_thanh_vien[ten] = {}
+
+    if "du_lieu_hoi" not in st.session_state:
+
+        st.session_state.du_lieu_hoi = tai_du_lieu_hoi(
+            ten
+        )
+
 
     du_lieu_hoi_dang_dung = (
-        st.session_state.du_lieu_thanh_vien[ten]
+        st.session_state.du_lieu_hoi
     )
-
 
 elif st.session_state.quyen == "xem":
 
@@ -997,7 +1012,7 @@ if st.session_state.quyen == "admin":
                         }
         
         
-                        if luu_du_lieu_len_github():
+                        if luu_du_lieu():
                             st.session_state.key_them_hoa += 1
                             st.rerun()
         
@@ -1180,7 +1195,7 @@ if st.session_state.quyen == "admin":
                                 ]
         
         
-                        if luu_du_lieu_len_github():
+                        if luu_du_lieu():
         
                             st.rerun()
         
@@ -1225,7 +1240,7 @@ if st.session_state.quyen == "hoi":
                     if ten_tv_clean:
                         du_lieu_hoi_dang_dung[ten_tv_clean] = []
 
-                        if luu_du_lieu_len_github():
+                        if luu_du_lieu():
                             st.session_state.key_them_tv += 1
                             st.rerun()
 
@@ -1242,7 +1257,7 @@ if st.session_state.quyen == "hoi":
                     if tv_xoa != "-- Chọn --":
                         del du_lieu_hoi_dang_dung[tv_xoa]
 
-                        if luu_du_lieu_len_github():
+                        if luu_du_lieu():
                             st.rerun()
 
 
@@ -1301,7 +1316,7 @@ if st.session_state.quyen == "hoi":
                             hoa_chon
                         )
 
-                        if luu_du_lieu_len_github():
+                        if luu_du_lieu():
                             st.rerun()
             else:
 
@@ -1622,7 +1637,7 @@ if st.session_state.quyen != "admin":
                                 )
             
             
-                                if luu_du_lieu_len_github():
+                                if luu_du_lieu():
             
             
                                     st.rerun()
@@ -1900,7 +1915,7 @@ if st.session_state.quyen != "admin":
                             st.session_state.ten_tai_khoan
                         ] = du_lieu_nhap
 
-                        luu_du_lieu_len_github()
+                        luu_du_lieu()
 
                         st.success("✅ Đã khôi phục dữ liệu")
 
@@ -2006,7 +2021,7 @@ if st.session_state.quyen == "admin":
 
                 st.session_state.tai_khoan[hoi_doi_pass]["pass"] = mk_hoi_moi
 
-                if luu_du_lieu_len_github():
+                if luu_du_lieu():
 
                     st.success("Đã đổi mật khẩu hội")
 
@@ -2043,7 +2058,7 @@ if st.session_state.quyen == "admin":
 
                 del st.session_state.tai_khoan[tk_xem_xoa]
 
-                if luu_du_lieu_len_github():
+                if luu_du_lieu():
 
                     st.success("Đã xóa")
 
@@ -2077,7 +2092,7 @@ if st.session_state.quyen == "admin":
             else:
                 st.session_state.tai_khoan["admin"]["pass"] = mk_admin_moi
 
-                if luu_du_lieu_len_github():
+                if luu_du_lieu():
                     st.success("✅ Đã đổi mật khẩu admin")
                     st.session_state.reset_admin_pass = True
                     st.rerun()
@@ -2139,14 +2154,17 @@ if st.session_state.quyen == "admin":
                     del st.session_state.tai_khoan[tk]
 
 
+                # xóa file dữ liệu riêng của hội
+                xoa_du_lieu_hoi(khach_xoa)
+
+
                 if luu_du_lieu_len_github():
 
                     st.success(
                         f"Đã xóa hội {khach_xoa}"
                     )
 
-                    st.rerun()
-
+                st.rerun()
 if st.session_state.quyen == "admin":
 
     with tab_kiem_soat:
@@ -2263,7 +2281,7 @@ if st.session_state.quyen == "hoi":
                     }
 
 
-                    luu_du_lieu_len_github()
+                    luu_du_lieu()
 
                     st.success("Đã tạo")
                     st.session_state.reset_tk_xem = True
