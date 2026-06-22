@@ -906,11 +906,11 @@ elif st.session_state.quyen == "hoi":
 
 elif st.session_state.quyen == "xem":
 
-    tk = st.session_state.ten_tai_khoan
+    hoi = st.session_state.chu_so_huu
 
-    hoi = st.session_state.tai_khoan[tk]["chu_so_huu"]
-
-    du_lieu_hoi_dang_dung = doc_du_lieu_hoi(hoi)
+    du_lieu_hoi_dang_dung = doc_du_lieu_hoi(
+        hoi
+    )
 
 st.markdown(
 """
@@ -924,13 +924,19 @@ unsafe_allow_html=True
 )
 
 
+du_lieu_dem = {
+    k:v
+    for k,v in du_lieu_hoi_dang_dung.items()
+    if not k.startswith("_")
+}
+
 tong_hoa_hoi_vien = sum(
     len(hoa)
-    for hoa in du_lieu_hoi_dang_dung.values()
+    for hoa in du_lieu_dem.values()
 )
 
 tong_hoi_vien = len(
-    du_lieu_hoi_dang_dung
+    du_lieu_dem
 )
 
 
@@ -2222,42 +2228,6 @@ if st.session_state.quyen == "admin":
                     st.session_state.reset_mk_hoi = True
 
                     st.rerun()
-        # =========================
-        # 👁️ XÓA TK XEM CỦA HỘI
-        # =========================
-
-        st.write("---")
-        st.markdown("### 👁️ Xóa tài khoản xem")
-
-        ds_xem = [
-            tk
-            for tk, info in st.session_state.tai_khoan.items()
-            if info.get("quyen") == "xem"
-        ]
-
-
-        tk_xem_xoa = st.selectbox(
-            "Chọn tài khoản xem",
-            ["-- Chọn --"] + ds_xem,
-            key="xoa_tk_xem"
-        )
-
-
-        if st.button(
-            "❌ Xóa tài khoản xem",
-            use_container_width=True
-        ):
-
-            if tk_xem_xoa != "-- Chọn --":
-
-                del st.session_state.tai_khoan[tk_xem_xoa]
-
-                if luu_du_lieu():
-
-                    st.success("Đã xóa")
-
-                    st.rerun()
-        
         # =============================
         # 🔑 ĐỔI MẬT KHẨU ADMIN
         # =============================
