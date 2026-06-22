@@ -1796,10 +1796,10 @@ if st.session_state.quyen != "admin":
 if st.session_state.quyen == "admin":
     with tab_khach:
 
-        st.markdown("### 👥 Quản lý tài khoản khách")
+        st.markdown("### 👥 Quản lý tài khoản hội")
 
         ten_moi = st.text_input(
-            "Tên tài khoản khách",
+            "Tên tài khoản hội",
             key="tao_user"
         )
 
@@ -1808,7 +1808,7 @@ if st.session_state.quyen == "admin":
             key="tao_pass"
         )
 
-        if st.button("➕ Tạo tài khoản khách"):
+        if st.button("➕ Tạo tài khoản hội"):
 
             if ten_moi.strip() == "" or mat_khau_moi.strip() == "":
                 st.warning("Nhập đủ tài khoản và mật khẩu")
@@ -1829,7 +1829,7 @@ if st.session_state.quyen == "admin":
 
                 luu_du_lieu_len_github()
 
-                st.success("Đã tạo tài khoản khách")
+                st.success("Đã tạo tài khoản hội")
                 st.rerun()
         # =========================
         # 🔑 ĐỔI MẬT KHẨU HỘI
@@ -2005,7 +2005,7 @@ if st.session_state.quyen == "admin":
                 if luu_du_lieu_len_github():
 
                     st.success(
-                        f"Đã xóa khách {khach_xoa}"
+                        f"Đã xóa hội {khach_xoa}"
                     )
 
                     st.rerun()
