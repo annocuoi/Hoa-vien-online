@@ -1388,9 +1388,9 @@ if st.session_state.quyen == "hoi":
                             st.session_state.dang_them_hoa = False
 
                             st.warning(
-                                "⏳ Đang đồng bộ, Từ từ thôi!"
+                                "⏳ Đang đồng bộ, thử lại sau"
                             )
-                                    else:
+            else:
 
                 st.info("✅ Hội viên đã có tất cả hoa")
 if st.session_state.quyen != "admin":
