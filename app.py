@@ -1121,7 +1121,7 @@ if st.session_state.quyen == "admin":
                 loc_cap = st.radio(
                     "Lọc cấp",
                     [
-                        f"⚪ Tất cả: {tong_hoa}",
+                        f"🌈 Tất cả: {tong_hoa}",
                         f"🔴 Đỏ: {dem_cap['Đỏ']}",
                         f"🟠 Cam: {dem_cap['Cam']}",
                         f"🟣 Tím: {dem_cap['Tím']}",
