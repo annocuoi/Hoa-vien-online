@@ -1946,24 +1946,43 @@ if st.session_state.quyen != "admin":
 
             if file_up is not None:
 
-                try:
-                    du_lieu_nhap = json.load(file_up)
+                if st.button(
+                    "♻️ Khôi phục dữ liệu",
+                    use_container_width=True
+                ):
 
-                    if st.button("♻️ Khôi phục dữ liệu", use_container_width=True):
+                    try:
 
-                        # ghi đè dữ liệu hội hiện tại
-                        st.session_state.du_lieu_thanh_vien[
-                            st.session_state.ten_tai_khoan
-                        ] = du_lieu_nhap
+                        du_lieu_nhap = json.load(file_up)
 
-                        luu_du_lieu()
 
-                        st.success("✅ Đã khôi phục dữ liệu")
+                        if isinstance(du_lieu_nhap, dict):
 
-                        st.rerun()
+                            # ghi đè dữ liệu hội hiện tại
+                            st.session_state.du_lieu_thanh_vien = du_lieu_nhap
 
-                except:
-                    st.error("❌ File không đúng định dạng")
+
+                            if luu_du_lieu():
+
+                                st.success(
+                                    "✅ Đã khôi phục dữ liệu"
+                                )
+
+                                st.rerun()
+
+
+                        else:
+
+                            st.error(
+                                "❌ File không đúng định dạng"
+                            )
+
+
+                    except:
+
+                        st.error(
+                            "❌ File bị lỗi"
+                        )
 # ==================================================
 # 👥 QUẢN LÝ TÀI KHOẢN KHÁCH
 # ==================================================
