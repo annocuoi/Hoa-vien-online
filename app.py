@@ -2392,7 +2392,13 @@ if st.session_state.quyen == "hoi":
 
         st.subheader("🔑 Tài khoản xem cho thành viên")
 
-        ten_hoi = st.session_state.ten_tai_khoan
+        ten_hoi = (
+            st.session_state.chu_so_huu
+            if st.session_state.get("chu_so_huu")
+            else st.session_state.ten_tai_khoan
+        )
+        st.write("ĐANG SỬA HỘ:", ten_hoi)
+        st.write(du_lieu_hoi_dang_dung)
 
 
         du_lieu_hoi_dang_dung = doc_du_lieu_hoi(
