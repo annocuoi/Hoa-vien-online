@@ -1309,9 +1309,13 @@ if st.session_state.quyen == "hoi":
 
             st.markdown("## 🪷 Thêm Hoa Cho Hội Viên")
 
-            danh_sach_tv = list(
-                du_lieu_hoi_dang_dung.keys()
+            danh_sach_tv = (
+                ["-- Chọn --"]
+                + list(
+                    du_lieu_hoi_dang_dung.keys()
+                )
             )
+
 
             tv_chon = st.selectbox(
                 "👤 Chọn hội viên",
@@ -1320,10 +1324,16 @@ if st.session_state.quyen == "hoi":
             )
 
             # lấy hoa hội viên đang có
-            hoa_da_co = du_lieu_hoi_dang_dung.get(
-                tv_chon,
-                []
-            )
+            if tv_chon == "-- Chọn --":
+
+                hoa_da_co = []
+
+            else:
+
+                hoa_da_co = du_lieu_hoi_dang_dung.get(
+                    tv_chon,
+                    []
+                )
 
             # lọc hoa chưa có
             hoa_chua_co = [
