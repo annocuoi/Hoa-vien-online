@@ -935,17 +935,33 @@ elif st.session_state.quyen == "xem":
         hoi
     )
 
+ten_hien_thi = "TÊN HỘI"
+
+if st.session_state.quyen == "hoi":
+
+    ten_hien_thi = st.session_state.tai_khoan[
+        st.session_state.ten_tai_khoan
+    ].get(
+        "ten_hien_thi",
+        st.session_state.ten_tai_khoan
+    )
+
+
+if st.session_state.quyen == "xem":
+
+    ten_hien_thi = st.session_state.chu_so_huu
+
+
 st.markdown(
-"""
+f"""
 <div class="title-hoi">
     <span>🌸</span>
-    <span>TÊN HỘI</span>
+    <span>{ten_hien_thi.upper()}</span>
     <span>🌸</span>
 </div>
 """,
 unsafe_allow_html=True
 )
-
 
 du_lieu_dem = {
     k:v
