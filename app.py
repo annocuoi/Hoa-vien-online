@@ -580,7 +580,7 @@ if not st.session_state.da_dang_nhap:
                 try:
 
                     data_hoi = doc_du_lieu_hoi(
-                        info.get("user", ten_hoi)
+                        ten_hoi.strip()
                     )
 
                 except:
