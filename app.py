@@ -719,6 +719,47 @@ def luu_du_lieu_hoi(ten_hoi, data):
         st.error(e)
 
         return False
+    
+def xoa_du_lieu_hoi(ten_hoi):
+
+    try:
+
+        file_path = tao_ten_file_hoi(ten_hoi)
+
+        url = (
+            f"https://api.github.com/repos/"
+            f"{REPO_NAME}/contents/"
+            f"{file_path}"
+        )
+
+        lay = requests.get(
+            url,
+            headers=HEADERS
+        )
+
+        if lay.status_code != 200:
+            return True
+
+
+        data = {
+            "message": f"xoa hoi {ten_hoi}",
+            "sha": lay.json()["sha"]
+        }
+
+
+        xoa = requests.delete(
+            url,
+            headers=HEADERS,
+            json=data
+        )
+
+
+        return xoa.status_code == 200
+
+
+    except:
+
+        return False
 # ==========================
 # LƯU THEO QUYỀN
 # ==========================
