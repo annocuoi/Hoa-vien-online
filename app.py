@@ -2449,17 +2449,6 @@ if st.session_state.quyen == "hoi":
 
                         st.rerun()
 
-
-        else:
-
-
-        if da_co:
-
-            st.success(
-                f"Đang có tài khoản xem: {da_co}"
-            )
-
-
         else:
 
             if "reset_tk_xem" in st.session_state:
