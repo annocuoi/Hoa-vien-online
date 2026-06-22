@@ -2551,7 +2551,7 @@ if st.session_state.quyen == "hoi":
 
                     st.warning("Nhập mật khẩu mới")
 
-                eelse:
+                else:
 
                     du_lieu_hoi_dang_dung["_tai_khoan_xem"]["pass"] = mk_moi
 
