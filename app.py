@@ -2418,6 +2418,28 @@ if st.session_state.quyen == "admin":
                     ---
                     """
                 )
+                ten_moi = st.text_input(
+                    "Tên hiển thị",
+                    value=info.get(
+                        "ten_hien_thi",
+                        ten
+                    ),
+                    key=f"doi_ten_{ten}"
+                )
+
+
+                if st.button(
+                    "💾 Lưu tên",
+                    key=f"luu_ten_{ten}"
+                ):
+
+                    st.session_state.tai_khoan[ten]["ten_hien_thi"] = ten_moi
+
+                    if luu_file():
+
+                        st.success("Đã đổi tên hội")
+
+                        st.rerun()
                 if info.get("trang_thai", "hoat_dong") == "hoat_dong":
 
                     if st.button(
