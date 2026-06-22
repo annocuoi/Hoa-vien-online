@@ -2173,6 +2173,13 @@ if st.session_state.quyen != "admin":
 # ==================================================
 if st.session_state.quyen == "admin":
     with tab_khach:
+        if "thong_bao" in st.session_state:
+
+            st.success(
+                st.session_state.thong_bao
+            )
+
+            del st.session_state.thong_bao 
         st.markdown("### 👥 Quản lý tài khoản hội")
         if "reset_tao_hoi" in st.session_state:
             st.session_state.tao_user = ""
