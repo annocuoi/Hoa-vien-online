@@ -1351,10 +1351,16 @@ if st.session_state.quyen == "hoi":
                     key="cap_hoa"
                 )
 
+                if "dang_them_hoa" not in st.session_state:
+                    st.session_state.dang_them_hoa = False
+
                 if st.button(
-                    "🌸 Thêm Hoa",
-                    use_container_width=True
+                    "🌺 Thêm Hoa",
+                    use_container_width=True,
+                    disabled=st.session_state.dang_them_hoa
                 ):
+
+                    st.session_state.dang_them_hoa = True
 
                     if not tv_chon or tv_chon == "-- Chọn --":
                         st.warning("⚠️ Vui lòng tạo hoặc chọn hội viên trước")
@@ -1368,8 +1374,23 @@ if st.session_state.quyen == "hoi":
                         )
 
                         if luu_du_lieu():
+
+                            st.success(
+                                "✅ Đã thêm hoa"
+                            )
+
+                            st.session_state.dang_them_hoa = False
+
                             st.rerun()
-            else:
+
+                        else:
+
+                            st.session_state.dang_them_hoa = False
+
+                            st.warning(
+                                "⏳ Đang đồng bộ, Từ từ thôi!"
+                            )
+                                    else:
 
                 st.info("✅ Hội viên đã có tất cả hoa")
 if st.session_state.quyen != "admin":
