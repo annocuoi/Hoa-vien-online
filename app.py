@@ -918,21 +918,30 @@ elif st.session_state.quyen == "xem":
 
 ten_hien_thi = "TÊN HỘI"
 
+# tài khoản hội
 if st.session_state.quyen == "hoi":
 
+    ten_goc = st.session_state.ten_tai_khoan
+
+
+# tài khoản xem
+elif st.session_state.quyen == "xem":
+
+    ten_goc = st.session_state.chu_so_huu
+
+
+else:
+
+    ten_goc = None
+
+
+if ten_goc:
+
     ten_hien_thi = st.session_state.tai_khoan[
-        st.session_state.ten_tai_khoan
+        ten_goc
     ].get(
         "ten_hien_thi",
-        st.session_state.ten_tai_khoan
-    )
-
-
-if st.session_state.quyen == "xem":
-
-    ten_hien_thi = du_lieu_hoi_dang_dung.get(
-        "ten_hien_thi",
-        st.session_state.chu_so_huu
+        ten_goc
     )
 
 
