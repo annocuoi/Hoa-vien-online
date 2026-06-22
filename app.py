@@ -2322,12 +2322,14 @@ if st.session_state.quyen == "admin":
 
             if info.get("quyen") == "hoi":
 
-                so_tv = len(
-                    st.session_state.du_lieu_thanh_vien.get(
-                        ten,
-                        {}
-                    )
-                )
+                so_tv = 0
+
+                for tk, info_tv in st.session_state.tai_khoan.items():
+                    if (
+                        info_tv.get("quyen") == "xem"
+                        and info_tv.get("chu_so_huu") == ten
+                    ):
+                        so_tv += 1
 
                 st.markdown(
                     f"""
