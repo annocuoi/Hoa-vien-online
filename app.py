@@ -507,6 +507,12 @@ if len(st.session_state.tai_khoan) == 0:
         "quyen": "admin",
         "ngay_tao": datetime.now().strftime("%d/%m/%Y")
     }
+def tao_ten_file_hoi(ten_hoi):
+
+    ten = ten_hoi.lower()
+    ten = ten.replace(" ","_")
+
+    return f"hoi/{ten}.json"
 def doc_du_lieu_hoi(ten_hoi):
 
     try:
@@ -720,14 +726,6 @@ def luu_du_lieu_len_github():
 # ==========================
 # DỮ LIỆU RIÊNG TỪNG HỘI
 # ==========================
-
-def tao_ten_file_hoi(ten_hoi):
-
-    ten = ten_hoi.lower()
-    ten = ten.replace(" ","_")
-
-    return f"hoi/{ten}.json"
-
 def luu_du_lieu_hoi(ten_hoi, data):
 
     try:
