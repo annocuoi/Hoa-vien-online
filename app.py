@@ -2393,10 +2393,10 @@ if st.session_state.quyen == "admin":
         if "thong_bao_xoa" in st.session_state:
 
             st.success(
-                st.session_state.thong_bao_xoa
+                st.session_state["thong_bao_xoa"]
             )
 
-            del st.session_state.thong_bao_xoa
+            del st.session_state["thong_bao_xoa"]
 
         st.subheader("📊 Kiểm soát khách hàng")
 
