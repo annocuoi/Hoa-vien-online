@@ -2418,6 +2418,12 @@ if st.session_state.quyen == "admin":
                     ---
                     """
                 )
+
+                if "thong_bao" in st.session_state:
+
+                    st.success(st.session_state.thong_bao)
+
+                    del st.session_state.thong_bao
                 ten_moi = st.text_input(
                     "Tên hiển thị",
                     value=info.get(
@@ -2437,7 +2443,7 @@ if st.session_state.quyen == "admin":
 
                     if luu_du_lieu():
 
-                        st.success("Đã đổi tên hội")
+                        st.session_state.thong_bao = "✅ Đã đổi tên hội thành công"
 
                         st.rerun()
                 if info.get("trang_thai", "hoat_dong") == "hoat_dong":
