@@ -507,6 +507,37 @@ if len(st.session_state.tai_khoan) == 0:
         "quyen": "admin",
         "ngay_tao": datetime.now().strftime("%d/%m/%Y")
     }
+def doc_du_lieu_hoi(ten_hoi):
+
+    try:
+
+        url = (
+            f"https://api.github.com/repos/"
+            f"{REPO_NAME}/contents/"
+            f"{tao_ten_file_hoi(ten_hoi)}"
+        )
+
+        r = requests.get(
+            url,
+            headers=HEADERS
+        )
+
+        if r.status_code == 200:
+
+            noi_dung = r.json()["content"]
+
+            return json.loads(
+                base64.b64decode(noi_dung)
+            )
+
+        else:
+
+            return {}
+
+
+    except:
+
+        return {}
 
 if not st.session_state.da_dang_nhap:
 
@@ -671,42 +702,6 @@ def tao_ten_file_hoi(ten_hoi):
     ten = ten.replace(" ","_")
 
     return f"hoi/{ten}.json"
-
-
-
-def doc_du_lieu_hoi(ten_hoi):
-
-    try:
-
-        url = (
-            f"https://api.github.com/repos/"
-            f"{REPO_NAME}/contents/"
-            f"{tao_ten_file_hoi(ten_hoi)}"
-        )
-
-        r = requests.get(
-            url,
-            headers=HEADERS
-        )
-
-        if r.status_code == 200:
-
-            noi_dung = r.json()["content"]
-
-            return json.loads(
-                base64.b64decode(noi_dung)
-            )
-
-        else:
-
-            return {}
-
-
-    except:
-
-        return {}
-
-
 
 def luu_du_lieu_hoi(ten_hoi, data):
 
