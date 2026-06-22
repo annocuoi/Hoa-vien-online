@@ -2435,7 +2435,7 @@ if st.session_state.quyen == "admin":
 
                     st.session_state.tai_khoan[ten]["ten_hien_thi"] = ten_moi
 
-                    if luu_file():
+                    if luu_du_lieu():
 
                         st.success("Đã đổi tên hội")
 
