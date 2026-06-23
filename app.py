@@ -1377,7 +1377,7 @@ if st.session_state.quyen == "hoi":
     with tab_hoi_vien:
 
         st.markdown(
-            "<h3>👥 2. Hội Viên & Thêm Hoa Hội Viên</h3>",
+            "<h3>👥 2. Hội Viên & Cấp Phát</h3>",
             unsafe_allow_html=True
         )
 
@@ -1569,9 +1569,18 @@ if st.session_state.quyen != "admin":
             })
 
 
-        bang_xep_hang = sorted(
-            bang_xep_hang,
-            key=lambda x:x["tong"],
+        bang_xep_hang.sort(
+            bang_xep_hang.sort(
+                key=lambda x: (
+                    x["🌺"],
+                    x["🔴"],
+                    x["🟠"],
+                    x["🟣"],
+                    x["🔵"],
+                    x["🟢"]
+                ),
+                reverse=True
+            )
             reverse=True
         )
 
