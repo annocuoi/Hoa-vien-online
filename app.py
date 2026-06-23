@@ -20,31 +20,6 @@ st.set_page_config(
         "About": None
     }
 )
-components.html(
-"""
-<script>
-function removeBadge(){
-    const badges = window.parent.document.querySelectorAll('div, a');
-    badges.forEach(el=>{
-        let txt = el.innerText || "";
-        if(
-            txt.includes("Hosted with Streamlit") ||
-            txt.includes("Created by")
-        ){
-            el.style.display = "none";
-            if(el.parentElement){
-                el.parentElement.style.display = "none";
-            }
-        }
-    });
-}
-
-setInterval(removeBadge, 500);
-</script>
-""",
-height=0
-)
-
 st.markdown(
     """
     <style>
