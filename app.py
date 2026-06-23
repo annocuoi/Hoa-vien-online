@@ -1572,15 +1572,14 @@ if st.session_state.quyen != "admin":
         bang_xep_hang.sort(
             key=lambda x: (
                 x["tong"],        # tổng hoa trước
-                x["đỏ"],          # đỏ
+                x["do"],          # đỏ
                 x["cam"],         # cam
-                x["tím"],         # tím
+                x["tim"],         # tím
                 x["xanh_duong"],  # xanh dương
                 x["xanh_lam"]     # xanh lam
             ),
             reverse=True
         )
-
 
         hang_xep = [
             bang_xep_hang[:1]   # top 1
