@@ -24,6 +24,30 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+    /* Ẩn icon Deploy / Github góc dưới phải */
+    .stAppDeployButton {
+        display: none !important;
+    }
+
+    /* Ẩn menu + icon phụ góc dưới */
+    [data-testid="stToolbar"] {
+        display: none !important;
+    }
+
+    /* Ẩn icon chạy app / manage app */
+    [data-testid="stStatusWidget"] {
+        display: none !important;
+    }
+
+    /* Ẩn footer Streamlit */
+    footer {
+        visibility: hidden !important;
+    }
+
+    /* Ẩn header Streamlit */
+    header {
+        visibility: hidden !important;
+    }
     /* Ẩn thanh toolbar Streamlit trên cùng */
     [data-testid="stToolbar"] {
         display: none;
