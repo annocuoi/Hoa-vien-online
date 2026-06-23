@@ -20,23 +20,34 @@ st.set_page_config(
         "About": None
     }
 )
+components.html(
+"""
+<script>
+function removeBadge(){
+    const badges = window.parent.document.querySelectorAll('div, a');
+    badges.forEach(el=>{
+        let txt = el.innerText || "";
+        if(
+            txt.includes("Hosted with Streamlit") ||
+            txt.includes("Created by")
+        ){
+            el.style.display = "none";
+            if(el.parentElement){
+                el.parentElement.style.display = "none";
+            }
+        }
+    });
+}
+
+setInterval(removeBadge, 500);
+</script>
+""",
+height=0
+)
 
 st.markdown(
     """
     <style>
-    /* Ẩn Streamlit Cloud badge dưới góc phải */
-    [data-testid="stAppDeployButton"] {
-        display:none !important;
-    }
-
-    .st-emotion-cache-1wbqy5l,
-    .st-emotion-cache-1avcm0n,
-    .st-emotion-cache-14xtw13,
-    .viewerBadge_container__1QSob,
-    .viewerBadge_link__1S137 {
-        display:none !important;
-    }
-
     /* chặn thanh fixed dưới cùng */
     div[class*="viewerBadge"] {
         display:none !important;
