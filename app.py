@@ -1535,6 +1535,8 @@ if st.session_state.quyen == "hoi":
                 with st.container(height=650):
 
                     cols = st.columns(4)
+                    if "hoa_dang_chon" not in st.session_state:
+                    st.session_state.hoa_dang_chon = []
 
                     for i, hoa in enumerate(danh_sach_hoa):
 
@@ -1557,12 +1559,18 @@ if st.session_state.quyen == "hoi":
                             }.get(cap,"")
 
                             tick = st.checkbox(
-                                f"{icon} {hoa}",
+                                "",
+                                value=hoa in st.session_state.hoa_dang_chon,
                                 key=f"chon_{tv_chon}_{hoa}"
                             )
 
                             if tick:
-                                hoa_chon.append(hoa)
+                                if hoa not in st.session_state.hoa_dang_chon:
+                                    st.session_state.hoa_dang_chon.append(hoa)
+
+                            else:
+                                if hoa in st.session_state.hoa_dang_chon:
+                                    st.session_state.hoa_dang_chon.remove(hoa)
                 # =====================
                 # LƯU
                 # =====================
@@ -1574,7 +1582,7 @@ if st.session_state.quyen == "hoi":
                 ):
 
 
-                    if len(hoa_chon) == 0:
+                    if len(st.session_state.hoa_dang_chon) == 0:
 
 
                         st.warning(
@@ -1585,7 +1593,7 @@ if st.session_state.quyen == "hoi":
                     else:
 
 
-                        for hoa in hoa_chon:
+                        for hoa in st.session_state.hoa_dang_chon:
 
 
                             if hoa not in du_lieu_hoi_dang_dung[tv_chon]:
