@@ -121,29 +121,6 @@ st.markdown(
     textarea {
         color:#000000 !important;
     }
-    /* ép toàn bộ chữ Streamlit */
-    .stApp * {
-        color:#111111 !important;
-    }
-
-
-    /* tiêu đề markdown HTML */
-    
-    [data-testid="stMarkdownContainer"],
-    [data-testid="stMarkdownContainer"] *,
-    [data-testid="stMarkdownContainer"] p,
-    [data-testid="stMarkdownContainer"] span {
-        color:#000000 !important;
-        font-weight:700 !important;
-    }
-
-
-    /* chữ trong container */
-    .element-container,
-    .element-container * {
-        color:#000000 !important;
-    }
-
 
     /* chữ tab */
     button[data-baseweb="tab"] *,
@@ -229,13 +206,6 @@ st.markdown(
         color: white;
     }
 
-
-    /* chữ toàn app */
-    h1,h2,h3,p,span,label,div {
-        color: white !important;
-    }
-
-
     /* ô nhập */
     input {
         background: rgba(255,255,255,0.9)!important;
@@ -289,18 +259,6 @@ html, body{
     padding:3px;
     box-shadow:0 3px 8px rgba(0,0,0,.3);
 }
-.hoa-img{
-    width:75px;
-    height:75px;
-    object-fit:cover;
-
-    border:5px solid;
-    border-radius:10px;
-    padding:3px;
-
-    box-shadow:0 3px 8px rgba(0,0,0,.3);
-}
-
 .flower-box img.cap-do{
     border:5px solid #ef4444;
 }
@@ -367,7 +325,6 @@ html, body{
 .member-count{
     font-size:10px;
 }
-
 
 </style>
 """
@@ -1376,166 +1333,364 @@ if st.session_state.quyen == "admin":
 if st.session_state.quyen == "hoi":
     with tab_hoi_vien:
 
-        st.markdown(
-            "<h3>👥 2. Hội Viên & Cấp Phát</h3>",
-            unsafe_allow_html=True
+        tab_cap_phat, tab_cap_nhanh, tab_ds_tv = st.tabs(
+            [
+                "👥 Hội viên",
+                "🌸 Cấp nhanh hoa",
+                "📋 Danh sách hội viên"
+            ]
         )
+        with tab_cap_phat:
 
-        col_tv1, col_tv2 = st.columns(2)
+            st.markdown("## 👥 Thêm + Xóa Hội Viên")
+            col_tv1 = st.container()
+            with col_tv1:
 
-
-        # =====================
-        # BÊN TRÁI: HỘI VIÊN
-        # =====================
-        with col_tv1:
-
-            with st.expander(
-                "➕ Quản lý hội viên",
-                expanded=False
-            ):
-                if "key_them_tv" not in st.session_state:
-                    st.session_state.key_them_tv = 0
-                ten_tv_moi = st.text_input(
-                    "➕ Nhập hội viên mới",
-                    placeholder="Nhập tên...",
-                    key=f"them_thanh_vien_{st.session_state.key_them_tv}"
-                )
-                
-                if st.button(
-                    "➕ Thêm hội viên",
-                    use_container_width=True
+                with st.expander(
+                    "➕ Quản lý hội viên",
+                    expanded=False
                 ):
-                    ten_tv_clean = ten_tv_moi.strip()
+                    if "key_them_tv" not in st.session_state:
+                        st.session_state.key_them_tv = 0
+                    ten_tv_moi = st.text_input(
+                        "➕ Nhập hội viên mới",
+                        placeholder="Nhập tên...",
+                        key=f"them_thanh_vien_{st.session_state.key_them_tv}"
+                    )
+                    
+                    if st.button(
+                        "➕ Thêm hội viên",
+                        use_container_width=True
+                    ):
+                        ten_tv_clean = ten_tv_moi.strip()
 
-                    if ten_tv_clean == "":
-                        st.warning("⚠️ Vui lòng nhập tên hội viên")
+                        if ten_tv_clean == "":
+                            st.warning("⚠️ Vui lòng nhập tên hội viên")
 
-                    elif ten_tv_clean.lower() in [
-                        x.lower() for x in du_lieu_hoi_dang_dung.keys()
-                    ]:
-                        st.error("❌ Hội viên đã tồn tại")
+                        elif ten_tv_clean.lower() in [
+                            x.lower() for x in du_lieu_hoi_dang_dung.keys()
+                        ]:
+                            st.error("❌ Hội viên đã tồn tại")
 
-                    else:
-                        du_lieu_hoi_dang_dung[ten_tv_clean] = []
+                        else:
+                            du_lieu_hoi_dang_dung[ten_tv_clean] = []
 
-                        if luu_du_lieu():
-                            st.session_state.key_them_tv += 1
-                            st.success("✅ Đã thêm hội viên")
-                            st.rerun()
-                danh_sach_tv_that = [
-                    x for x in du_lieu_hoi_dang_dung.keys()
-                    if not x.startswith("_")
-                ]
-                tv_xoa = st.selectbox(
-                    "🗑 Xóa hội viên",
-                    ["-- Chọn --"] + danh_sach_tv_that,
-                    key="xoa_tv"
-                )
+                            if luu_du_lieu():
+                                st.session_state.key_them_tv += 1
+                                st.success("✅ Đã thêm hội viên")
+                                st.rerun()
+                    danh_sach_tv_that = [
+                        x for x in du_lieu_hoi_dang_dung.keys()
+                        if not x.startswith("_")
+                    ]
+                    tv_xoa = st.selectbox(
+                        "🗑 Xóa hội viên",
+                        ["-- Chọn --"] + danh_sach_tv_that,
+                        key="xoa_tv"
+                    )
 
-                if st.button(
-                    "❌ Xóa",
-                    use_container_width=True
-                ):
-                    if tv_xoa != "-- Chọn --":
-                        del du_lieu_hoi_dang_dung[tv_xoa]
+                    if st.button(
+                        "❌ Xóa",
+                        use_container_width=True
+                    ):
+                        if tv_xoa != "-- Chọn --":
+                            del du_lieu_hoi_dang_dung[tv_xoa]
 
-                        if luu_du_lieu():
-                            st.rerun()
+                            if luu_du_lieu():
+                                st.rerun()
+        with tab_cap_nhanh:
+
+            st.markdown("## 🪷 Cấp Hoa Cho Hội Viên")
 
 
-        # =====================
-        # BÊN PHẢI: CẤP HOA
-        # =====================
-        with col_tv2:
-
-            st.markdown("## 🪷 Thêm Hoa Cho Hội Viên")
-
-            danh_sach_tv = (
-                ["-- Chọn --"]
-                +
-                [
-                    x for x in du_lieu_hoi_dang_dung.keys()
-                    if not x.startswith("_")
-                ]
-            )
+            danh_sach_tv = [
+                x for x in du_lieu_hoi_dang_dung.keys()
+                if not x.startswith("_")
+            ]
 
 
             tv_chon = st.selectbox(
                 "👤 Chọn hội viên",
-                danh_sach_tv,
-                key="cap_tv"
+                ["-- Chọn --"] + danh_sach_tv,
+                key="chon_tv_cap_nhanh"
             )
 
-            # lấy hoa hội viên đang có
-            if tv_chon == "-- Chọn --":
 
-                hoa_da_co = []
+            if tv_chon != "-- Chọn --":
 
-            else:
 
                 hoa_da_co = du_lieu_hoi_dang_dung.get(
                     tv_chon,
                     []
                 )
 
-            # lọc hoa chưa có
-            hoa_chua_co = [
-                hoa
-                for hoa in st.session_state.kho_hoa_tong.keys()
-                if hoa not in hoa_da_co
-            ]
+
+                danh_sach_hoa_goc = [
+                    hoa
+                    for hoa in st.session_state.kho_hoa_tong.keys()
+                    if hoa not in hoa_da_co
+                ]
 
 
-            if len(hoa_chua_co) > 0:
+                # =====================
+                # ĐẾM CẤP HOA
+                # =====================
 
-                hoa_chon = st.selectbox(
-                    "🌸 Chọn hoa",
-                    hoa_chua_co,
-                    key="cap_hoa"
+                dem_cap = {
+                    "Đỏ":0,
+                    "Cam":0,
+                    "Tím":0,
+                    "Xanh dương":0,
+                    "Xanh lá":0
+                }
+
+
+                for hoa in danh_sach_hoa_goc:
+
+                    cap = (
+                        st.session_state.kho_hoa_tong
+                        .get(hoa,{})
+                        .get("cap")
+                    )
+
+                    if cap in dem_cap:
+                        dem_cap[cap] += 1
+
+
+
+                mau_chon = st.radio(
+                    "🌈 Loại hoa: (Số đếm kế bên là số lượng hoa mà hv chưa có)",
+                    [
+                        f"🌸 Tất cả: {len(danh_sach_hoa_goc)}",
+                        f"🔴 Đỏ: {dem_cap['Đỏ']}",
+                        f"🟠 Cam: {dem_cap['Cam']}",
+                        f"🟣 Tím: {dem_cap['Tím']}",
+                        f"🔵 Xanh dương: {dem_cap['Xanh dương']}",
+                        f"🟢 Xanh lá: {dem_cap['Xanh lá']}"
+                    ],
+                    horizontal=True,
+                    key="loc_mau_cap_hoa"
                 )
 
-                if "dang_them_hoa" not in st.session_state:
-                    st.session_state.dang_them_hoa = False
+                danh_sach_hoa = danh_sach_hoa_goc.copy()
+
+
+                if "Tất cả" not in mau_chon:
+
+
+                    ten_mau = (
+                        mau_chon
+                        .split(":")[0]
+                        .replace("🔴 ","")
+                        .replace("🟠 ","")
+                        .replace("🟣 ","")
+                        .replace("🔵 ","")
+                        .replace("🟢 ","")
+                    )
+
+
+                    danh_sach_hoa = [
+
+                        hoa for hoa in danh_sach_hoa
+
+                        if st.session_state.kho_hoa_tong
+                        .get(hoa,{})
+                        .get("cap") == ten_mau
+
+                    ]
+                    # giữ danh sách gốc
+                    danh_sach_hoa_goc = danh_sach_hoa.copy()
+                    # 🔍 TÌM HOA
+                    tim_hoa = st.text_input(
+                        "🔍 Tìm hoa",
+                        placeholder="Nhập tên hoa...",
+                        key="tim_hoa_cap_nhanh"
+                    )
+
+                    if tim_hoa.strip():
+
+                        danh_sach_hoa = [
+                            hoa
+                            for hoa in danh_sach_hoa
+                            if tim_hoa.lower().strip()
+                            in hoa.lower()
+                        ]
+
+
+                st.markdown("### 🌸 Chọn hoa")
+
+
+                hoa_chon = []
+
+
+                # =====================
+                # KHUNG CUỘN HOA NHẸ
+                # =====================
+
+                with st.container(height=650):
+
+                    cols = st.columns(4)
+
+                    for i, hoa in enumerate(danh_sach_hoa):
+
+                        with cols[i % 4]:
+
+                            thong_tin = (
+                                st.session_state
+                                .kho_hoa_tong
+                                .get(hoa,{})
+                            )
+
+                            cap = thong_tin.get("cap")
+
+                            icon = {
+                                "Đỏ":"🔴",
+                                "Cam":"🟠",
+                                "Tím":"🟣",
+                                "Xanh dương":"🔵",
+                                "Xanh lá":"🟢"
+                            }.get(cap,"")
+
+                            tick = st.checkbox(
+                                f"{icon} {hoa}",
+                                key=f"chon_{tv_chon}_{hoa}"
+                            )
+
+                            if tick:
+                                hoa_chon.append(hoa)
+                # =====================
+                # LƯU
+                # =====================
+
 
                 if st.button(
-                    "🌺 Thêm Hoa",
-                    use_container_width=True,
-                    disabled=st.session_state.dang_them_hoa
+                    "🌺 Hoàn thành",
+                    use_container_width=True
                 ):
 
-                    st.session_state.dang_them_hoa = True
 
-                    if not tv_chon or tv_chon == "-- Chọn --":
-                        st.warning("⚠️ Vui lòng tạo hoặc chọn hội viên trước")
+                    if len(hoa_chon) == 0:
 
-                    elif hoa_chon == "-- Chọn hoa --":
-                        st.warning("⚠️ Vui lòng chọn hoa")
+
+                        st.warning(
+                            "⚠️ Chưa chọn hoa"
+                        )
+
 
                     else:
-                        du_lieu_hoi_dang_dung[tv_chon].append(
-                            hoa_chon
-                        )
+
+
+                        for hoa in hoa_chon:
+
+
+                            if hoa not in du_lieu_hoi_dang_dung[tv_chon]:
+
+                                du_lieu_hoi_dang_dung[tv_chon].append(
+                                    hoa
+                                )
+
 
                         if luu_du_lieu():
 
+
                             st.success(
-                                "✅ Đã thêm hoa"
+                                f"✅ Đã thêm {len(hoa_chon)} hoa cho {tv_chon}"
                             )
 
-                            st.session_state.dang_them_hoa = False
 
                             st.rerun()
 
-                        else:
 
-                            st.session_state.dang_them_hoa = False
 
-                            st.error(
-                                "❌ Lưu thất bại, kiểm tra mạng"
-                            )
             else:
 
-                st.info("✅ Hội viên đã có tất cả hoa")
+
+                st.info(
+                    "👆 Chọn hội viên để cấp hoa"
+                )
+
+        with tab_ds_tv:
+
+            st.markdown("## 📋 Danh sách hội viên")
+
+
+            danh_sach_tv = [
+                tv
+                for tv in du_lieu_hoi_dang_dung.keys()
+                if not tv.startswith("_")
+            ]
+
+
+            st.info(
+                f"👥 Tổng hội viên: {len(danh_sach_tv)}"
+            )
+
+
+            bang_tv = []
+
+            for ten_tv, ds_hoa in du_lieu_hoi_dang_dung.items():
+
+                if ten_tv.startswith("_"):
+                    continue
+
+                dem = {
+                    "Đỏ": 0,
+                    "Cam": 0,
+                    "Tím": 0,
+                    "Xanh dương": 0,
+                    "Xanh lá": 0
+                }
+
+
+                for hoa in ds_hoa:
+
+                    thong_tin = (
+                        st.session_state
+                        .kho_hoa_tong
+                        .get(hoa,{})
+                    )
+
+                    # lấy cả 2 trường cho khỏi lỗi
+                    mau = (
+                        thong_tin.get("mau")
+                        or
+                        thong_tin.get("cap")
+                    )
+
+
+                    if mau in dem:
+                        dem[mau] += 1
+
+
+                tong = sum(dem.values())
+
+
+                bang_tv.append({
+
+                    "👤 Hội viên": ten_tv,
+                    "🌸 Tổng": tong,
+                    "🔴 Đỏ": dem["Đỏ"],
+                    "🟠 Cam": dem["Cam"],
+                    "🟣 Tím": dem["Tím"],
+                    "🔵 Xanh dương": dem["Xanh dương"],
+                    "🟢 Xanh lá": dem["Xanh lá"]
+
+                })
+
+
+            # 🏆 xếp hạng ngầm (không hiện cột)
+            bang_tv = sorted(
+                bang_tv,
+                key=lambda x: x["🌸 Tổng"],
+                reverse=True
+            )
+
+
+            st.dataframe(
+                bang_tv,
+                hide_index=True,
+                use_container_width=True
+            )
 if st.session_state.quyen != "admin":
     with tab_xep_hang:
 
@@ -1685,7 +1840,6 @@ overflow:hidden;
 # ====================================================
 if st.session_state.quyen != "admin":
     with tab_suu_tap:
-        st.markdown("<h3 style='font-size: 18px;'>🔍 3. Bộ Sưu Tập</h3>", unsafe_allow_html=True)
         tab1, tab2, tab3 = st.tabs(
             [
                 "👤 Cá Nhân",
@@ -1833,10 +1987,10 @@ if st.session_state.quyen != "admin":
         
         
                     components.html(
-            GRID_STYLE + html,
-            height=450,
-            scrolling=True
-        )
+                        GRID_STYLE + html,
+                        height=450,
+                        scrolling=True
+                    )
         
         
                     st.write("")
