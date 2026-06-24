@@ -1561,48 +1561,10 @@ if st.session_state.quyen == "hoi":
 
                             }.get(cap,"black")
 
-
-                            cot_tick, cot_chu = st.columns(
-                                [0.25,3]
-                            )
-
-
-                            with cot_tick:
-
-                                tick = st.checkbox(
-                                "",
-                                value=hoa in st.session_state.hoa_dang_chon,
-                                key=f"chon_{tv_chon}_{hoa}"
-                            )
-
-
-                            st.markdown(
-                                f"""
-                                <style>
-                                div[data-testid="stCheckbox"] {{
-                                    display:inline-block;
-                                }}
-                                </style>
-
-                                <div style="
-                                    margin-top:-42px;
-                                    margin-left:35px;
-                                    color:{mau_chu};
-                                    font-weight:700;
-                                    font-size:16px;
-                                    white-space:nowrap;
-                                ">
-                                    {hoa}
-                                </div>
-                                """,
-                                unsafe_allow_html=True
-                            )
-
-
                             tick = st.checkbox(
                                 "",
                                 value=hoa in st.session_state.hoa_dang_chon,
-                                key=f"chon_{tv_chon}_{hoa}"
+                                key=f"capnhanh_{tv_chon}_{hoa}"
                             )
 
 
@@ -1611,13 +1573,11 @@ if st.session_state.quyen == "hoi":
                                 <div style="
                                     margin-top:-42px;
                                     margin-left:35px;
-
                                     color:{mau_chu};
-
                                     font-weight:700;
                                     font-size:16px;
-
                                     white-space:nowrap;
+                                    height:35px;
                                 ">
                                     {hoa}
                                 </div>
