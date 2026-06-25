@@ -1629,10 +1629,22 @@ if st.session_state.quyen == "hoi":
 
                         if luu_du_lieu():
 
+                            so_hoa = len(st.session_state.hoa_dang_chon)
 
                             st.success(
-                                f"✅ Đã thêm {len(hoa_chon)} hoa cho {tv_chon}"
+                                f"✅ Đã thêm {so_hoa} hoa cho {tv_chon}"
                             )
+
+
+                            # =====================
+                            # XÓA TICK SAU KHI LƯU
+                            # =====================
+
+                            st.session_state.hoa_dang_chon = []
+
+                            for k in list(st.session_state.keys()):
+                                if k.startswith("capnhanh_"):
+                                    del st.session_state[k]
 
 
                             st.rerun()
