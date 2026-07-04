@@ -1416,6 +1416,13 @@
             "trang_thai": "hoat_dong",
             "ten_hien_thi": "ĐàoHoa",
             "ngay_tao": "28/06/2026"
+        },
+        "dathoang25899": {
+            "pass": "Bin25899",
+            "quyen": "hoi",
+            "trang_thai": "hoat_dong",
+            "ten_hien_thi": "dathoang25899",
+            "ngay_tao": "04/07/2026"
         }
     }
 }
